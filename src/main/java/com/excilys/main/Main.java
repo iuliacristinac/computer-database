@@ -1,6 +1,5 @@
 package com.excilys.main;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,34 +12,38 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-/*		
-		CompanyService companyService = new CompanyService();
-		List<Company> companies = new ArrayList<Company>();
-
-		try {
-			companies = companyService.getAll();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		for (Company company : companies) {
-			System.out.println(company);
-		}
-	*/
-		ComputerService computerService = new ComputerService();		
-		List<Computer> computers = new ArrayList<Computer>();
-
-		try {
-			computers = computerService.getAll();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		for (Computer computer : computers) {
-			System.out.println(computer);
-		}
 	
-	}
+//		CompanyService companyService = CompanyService.INSTANCE;
+//		List<Company> companies = new ArrayList<Company>();
+//		companies = companyService.getAll();
+//		for (Company company : companies) {
+//			System.out.println(company);
+//		}
+	
+	
+		ComputerService computerService = ComputerService.INSTANCE;		
+//		List<Computer> computers = new ArrayList<Computer>();
+//		computers = computerService.getAll();
+//		for (Computer computer : computers) {
+//			System.out.println(computer);
+//		}
+	
+//		Computer computer = new Computer();
+//		computer.setName("computerTest");
+//		computerService.create(computer);
 
+		Computer computer = computerService.getbyId(574L);
+		System.out.println(computer);
+		computer.setName("iPhone 4S");
+		computerService.update(computer);
+		System.out.println(computerService.getbyId(574L));
+		
+//		computerService.delete(576L);
+
+//		Computer computer = computerService.getbyId(576L);
+//		System.out.println(computer);
+		
+//		Computer computer = computerService.getbyId(574L);
+//		System.out.println(computer);
+	}
 }

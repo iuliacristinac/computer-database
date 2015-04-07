@@ -1,37 +1,37 @@
 package com.excilys.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
-import com.excilys.dao.CompanyDAO;
+import com.excilys.exception.ServiceException;
 import com.excilys.model.Company;
+import com.excilys.persistance.dao.CompanyDAO;
 
-public class CompanyService {
+public enum CompanyService implements IService<Company, Long> {
+	INSTANCE;
 	
 	private CompanyDAO companyDAO;
 	
-	public CompanyService() {
-		companyDAO = new CompanyDAO();
+	private CompanyService() {
+		companyDAO = CompanyDAO.INSTANCE;
 	}
 	
-	public Company getbyId( Long id) throws SQLException {
-		return companyDAO.getbyId(id);
-	}
-	
-	public List<Company> getAll() throws SQLException {
+//	@Override
+//	public Company getbyId( Long id) {
+//		if (id <= 0) {
+//			throw new ServiceException("CompanyService_getbyId - Invalid id!");
+//		}
+//		return companyDAO.getbyId(id);
+//	}
+//	
+	@Override
+	public List<Company> getAll() {
 		return companyDAO.getAll();
 	}
-	
-	public Long create( Company entity) throws SQLException {
-		return companyDAO.create(entity);
+
+	public Company getById(Long id) {
+		if (id <= 0) {
+			throw new ServiceException("CompanyService_getbyId - Invalid id!");
+		}
+		return companyDAO.getbyId(id);
 	}
-	
-	public void update( Company entity) throws SQLException {
-		companyDAO.update(entity);
-	}
-	
-	public void delete( Long id) throws SQLException {
-		companyDAO.delete(id);
-	}
-	
 }

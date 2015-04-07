@@ -32,7 +32,7 @@ public class CompanyDAOTest {
 		final int expectedSize = 3;
 		final Company expectedCompany1 = new Company(1L, "Apple INC.");
 		final Company expectedCompany2 = new Company(2L, "Thinking Machines");
-		final Company expectedCompany3 = new Company(3L, "Thinking Machines");
+		final Company expectedCompany3 = new Company(3L, "RCA");
 		// WHEN
 		final List<Company> companies = CompanyDAO.INSTANCE.getAll();
 		// THEN
@@ -41,4 +41,17 @@ public class CompanyDAOTest {
 		Assertions.assertThat(companies).contains(expectedCompany1, expectedCompany2, expectedCompany3);
 	}
 
+	@Test
+	public void getAllNoEntities() throws Exception {
+		//GIVEN
+		dbUtil.importDataSet("src/test/java/datasets/companyDAO/getAllEmpty.xml");
+		
+		// WHEN
+		final List<Company> companies = CompanyDAO.INSTANCE.getAll();
+		// THEN
+		Assertions.assertThat(companies).isNotNull();
+		Assertions.assertThat(companies).isEmpty();
+	}
+
+	
 }

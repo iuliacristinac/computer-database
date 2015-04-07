@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.util.Validator;
+import com.excilys.util.DateUtil;
 
 public enum ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 	INSTANCE;
@@ -52,14 +52,14 @@ public enum ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 		if (dto.getIntroduced() != null) {
 			dto.setIntroduced( dto.getIntroduced().trim());
 			if (!dto.getIntroduced().isEmpty()) {
-				dto.setIntroduced( convertToValidDate(dto.getIntroduced()));
+				dto.setIntroduced( DateUtil.convertToValidDate(dto.getIntroduced()));
 				computer.setIntroduced(LocalDateTime.parse(dto.getIntroduced(),formatter));
 			}
 		}
 		if (dto.getDiscontinued() != null) {
 			dto.setDiscontinued(dto.getDiscontinued().trim());
 			if (!dto.getDiscontinued().isEmpty()) {
-				dto.setDiscontinued( convertToValidDate(dto.getDiscontinued()));
+				dto.setDiscontinued( DateUtil.convertToValidDate(dto.getDiscontinued()));
 				computer.setDiscontinued(LocalDateTime.parse(dto.getDiscontinued(), formatter));
 			}
 		}
@@ -72,18 +72,5 @@ public enum ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 		}
 			
 		return computer;
-	}
-	
-	private String convertToValidDate( String date){
-		
-		if ( Validator.isValidDateHour(date)) {
-			return date;
-		}
-		else {
-				if (Validator.isValidDate(date)){
-					return date + " " + "00:00:00";
-			}
-		}
-		throw new IllegalArgumentException("ComputerMapperDTO - Invalid Date!");
 	}
 }

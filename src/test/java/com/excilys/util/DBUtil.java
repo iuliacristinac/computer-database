@@ -26,15 +26,15 @@ public class DBUtil {
 	
 	public DBUtil() {
 		System.setProperty("env", "TEST");
-		
-		testConnection = ConnectionDB.INSTANCE.getConnection();
-		url = ConnectionDB.INSTANCE.getUrl();
-		user = ConnectionDB.INSTANCE.getUser();
-		password = ConnectionDB.INSTANCE.getPassword();
-		driver = ConnectionDB.INSTANCE.getDriver();
+//		
+//		testConnection = ConnectionDB.INSTANCE.getConnection();
+//		url = ConnectionDB.INSTANCE.getUrl();
+//		user = ConnectionDB.INSTANCE.getUser();
+//		password = ConnectionDB.INSTANCE.getPassword();
+//		driver = ConnectionDB.INSTANCE.getDriver();
 		
 		try {
-			RunScript.execute(url, user, password, "testDB.sql", Charset.forName("UTF8"), false);
+			RunScript.execute(url, user, password, "src/test/resources/testDB.sql", Charset.forName("UTF8"), false);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
