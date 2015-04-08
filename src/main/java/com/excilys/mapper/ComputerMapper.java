@@ -4,11 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-public enum ComputerMapper implements IMapper<Computer> {
-	INSTANCE;
+@Component
+public class ComputerMapper implements IMapper<Computer> {
 
 	@Override
 	public Computer mapResultSetToModel( ResultSet result) throws SQLException {

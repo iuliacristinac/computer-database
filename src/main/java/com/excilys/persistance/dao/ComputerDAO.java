@@ -11,26 +11,24 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 import com.excilys.persistance.ConnectionDB;
 
-public enum ComputerDAO implements IDAO<Computer, Long>{
-	INSTANCE;
+@Repository
+public class ComputerDAO implements IDAO<Computer, Long>{
  
+	@Autowired
 	private ComputerMapper computerMapper;
+	@Autowired
 	private ConnectionDB connectionDB;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
-	
-	private ComputerDAO(){
-		
-		computerMapper = ComputerMapper.INSTANCE;
-		connectionDB = ConnectionDB.INSTANCE;
-	}
-	
+
 	@Override
 	public Computer getbyId(Long id) {	
 		

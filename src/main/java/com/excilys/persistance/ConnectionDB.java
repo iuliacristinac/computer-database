@@ -6,12 +6,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.exception.ConnectionException;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public enum ConnectionDB {
-	INSTANCE;
+@Component
+public class ConnectionDB {
 
 	private Properties properties;
 	private static BoneCP connectionPool = null;

@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.CompanyMapper;
@@ -18,23 +20,25 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.persistance.ConnectionDB;
 
-public enum CompanyDAO implements IDAO<Company, Long> {
-	INSTANCE;
+@Repository
+public class CompanyDAO implements IDAO<Company, Long> {
 	
-	private Connection connection;
+	@Autowired
 	private CompanyMapper companyMapper;
+	@Autowired
+	private ComputerMapper computerMapper;
+	@Autowired 
+	private ComputerDAO computerDAO;
+	@Autowired
 	private ConnectionDB connectionDB;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 	
-	private CompanyDAO() {
-		connection = ConnectionDB.INSTANCE.getInstance();
-		companyMapper = CompanyMapper.INSTANCE;
-		connectionDB = ConnectionDB.INSTANCE;
-	}
-	
 	@Override
 	public Company getbyId(Long id) {	
+		
+		final Connection connection = connectionDB.getInstance();
+		
 		String query = "SELECT * FROM company WHERE id = ?";
 		
 		Company company = null;
@@ -58,6 +62,9 @@ public enum CompanyDAO implements IDAO<Company, Long> {
 
 	@Override
 	public List<Company> getAll() {		
+		
+		final Connection connection = connectionDB.getInstance();
+		
 		List<Company> companies = new ArrayList<>();
 		try {
 			Statement statement = connection.createStatement();
@@ -79,6 +86,9 @@ public enum CompanyDAO implements IDAO<Company, Long> {
 	
 	@Override
 	public void delete(Long id) {	
+		
+		final Connection connection = connectionDB.getInstance();
+		
 		String query = "DELETE FROM company WHERE id = ?";
 		String queryComputer = "SELECT * FROM computer WHERE company_id = ?";
 	
@@ -90,8 +100,8 @@ public enum CompanyDAO implements IDAO<Company, Long> {
 			ResultSet resultSet = preparedStatementComputer.executeQuery(queryComputer);
 			while ( resultSet.next() )
 			{
-				Computer computer = ComputerMapper.INSTANCE.mapResultSetToModel(resultSet);
-				ComputerDAO.INSTANCE.delete(computer.getId());
+				Computer computer = computerMapper.mapResultSetToModel(resultSet);
+				computerDAO.delete(computer.getId());
 			}			
 			preparedStatement.execute();	
 			connectionDB.commit();

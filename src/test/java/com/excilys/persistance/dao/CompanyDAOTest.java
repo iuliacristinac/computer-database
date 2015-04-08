@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.model.Company;
 import com.excilys.util.DBUtil;
@@ -13,6 +14,9 @@ import com.excilys.util.DBUtil;
 public class CompanyDAOTest {
 
 	private static DBUtil dbUtil;
+	
+	@Autowired
+	private CompanyDAO companyDAO;
 	
 	@BeforeClass
 	public static void setUpDB() {
@@ -34,7 +38,7 @@ public class CompanyDAOTest {
 		final Company expectedCompany2 = new Company(2L, "Thinking Machines");
 		final Company expectedCompany3 = new Company(3L, "RCA");
 		// WHEN
-		final List<Company> companies = CompanyDAO.INSTANCE.getAll();
+		final List<Company> companies = companyDAO.getAll();
 		// THEN
 		Assertions.assertThat(companies).isNotNull();
 		Assertions.assertThat(companies.size()).isEqualTo(expectedSize);
@@ -47,7 +51,7 @@ public class CompanyDAOTest {
 		dbUtil.importDataSet("src/test/java/datasets/companyDAO/getAllEmpty.xml");
 		
 		// WHEN
-		final List<Company> companies = CompanyDAO.INSTANCE.getAll();
+		final List<Company> companies = companyDAO.getAll();
 		// THEN
 		Assertions.assertThat(companies).isNotNull();
 		Assertions.assertThat(companies).isEmpty();

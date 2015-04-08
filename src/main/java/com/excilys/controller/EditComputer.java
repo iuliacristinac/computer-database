@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
@@ -26,6 +27,12 @@ public class EditComputer extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EditComputer.class);
 
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ComputerService computerService;
+	
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +42,7 @@ public class EditComputer extends HttpServlet {
 			if (!id.isEmpty()) {
 				Long idComputer = Long.valueOf(id);
 				request.setAttribute("computer",
-						ComputerService.INSTANCE.getById(idComputer));
+						computerService.getById(idComputer));
 			}
 		}
 //		request.setAttribute("companiesId",
@@ -104,10 +111,10 @@ public class EditComputer extends HttpServlet {
 			companyId = companyId.trim();
 			if (!companyId.isEmpty()) {
 				Long compId = Long.valueOf(companyId);
-				company = CompanyService.INSTANCE.getById(compId);
+				company = companyService.getById(compId);
 			}
 		}
-		ComputerService.INSTANCE.update(new Computer(computerId, name,
+		computerService.update(new Computer(computerId, name,
 				introducedTime, discontinuedTime, company));
 		resp.sendRedirect("dashboard");
 	}

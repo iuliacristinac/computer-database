@@ -8,20 +8,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.mapper.ComputerMapperDTO;
 import com.excilys.service.ComputerService;
-import com.excilys.util.Page;
 
 @WebServlet(urlPatterns = "/dashboard")
 public class Dashboard extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	@Autowired
+	private ComputerMapperDTO computerMapperDTO;
+		
+	@Autowired
+	private ComputerService computerService;
+	
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		ComputerMapperDTO computerMapperDTO = ComputerMapperDTO.INSTANCE;
 		
 		/*String page = request.getParameter("page");
 		String size = request.getParameter("size");
@@ -50,7 +55,7 @@ public class Dashboard extends HttpServlet {
 		request.setAttribute("page", p);
 		request.setAttribute("sizePage", entitiesByPage);
 		request.setAttribute("maxPages", maxPages);*/
-		request.setAttribute("computers", computerMapperDTO.modelsToDto(ComputerService.INSTANCE.getAll()));
+		request.setAttribute("computers", computerMapperDTO.modelsToDto(computerService.getAll()));
 //		request.setAttribute("currentPage", pge);
 //		request.setAttribute("total", totalEntities);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);

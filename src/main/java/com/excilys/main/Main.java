@@ -21,7 +21,7 @@ public class Main {
 //		}
 	
 	
-		ComputerService computerService = ComputerService.INSTANCE;		
+//		ComputerService computerService = ComputerService.INSTANCE;		
 //		List<Computer> computers = new ArrayList<Computer>();
 //		computers = computerService.getAll();
 //		for (Computer computer : computers) {
@@ -32,11 +32,11 @@ public class Main {
 //		computer.setName("computerTest");
 //		computerService.create(computer);
 
-		Computer computer = computerService.getbyId(574L);
-		System.out.println(computer);
-		computer.setName("iPhone 4S");
-		computerService.update(computer);
-		System.out.println(computerService.getbyId(574L));
+//		Computer computer = computerService.getbyId(574L);
+//		System.out.println(computer);
+//		computer.setName("iPhone 4S");
+//		computerService.update(computer);
+//		System.out.println(computerService.getbyId(574L));
 		
 //		computerService.delete(576L);
 

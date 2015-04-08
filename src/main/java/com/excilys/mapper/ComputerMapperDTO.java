@@ -3,13 +3,15 @@ package com.excilys.mapper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.util.DateUtil;
 
-public enum ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
-	INSTANCE;
+@Component
+public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 	
 	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 

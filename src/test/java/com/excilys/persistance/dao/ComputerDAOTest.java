@@ -5,6 +5,7 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
@@ -13,6 +14,9 @@ import com.excilys.util.DBUtil;
 public class ComputerDAOTest {
 
 	private static DBUtil dbUtil;
+	
+	@Autowired
+	private ComputerDAO computerDAO;
 	
 	@BeforeClass
 	public static void setUpDB() {
@@ -35,7 +39,7 @@ public class ComputerDAOTest {
 		final Computer expectedComputer2 = new Computer(2L, "CM-2a", company2);
 		final Computer expectedComputer3 = new Computer(7L, "Apple IIe");
 		// WHEN
-		final List<Computer> computers = ComputerDAO.INSTANCE.getAll();
+		final List<Computer> computers = computerDAO.getAll();
 		// THEN
 		Assertions.assertThat(computers).isNotNull();
 		Assertions.assertThat(computers.size()).isEqualTo(expectedSize);
@@ -48,7 +52,7 @@ public class ComputerDAOTest {
 		dbUtil.importDataSet("src/test/java/datasets/computerDAO/getAllEmpty.xml");
 		
 		// WHEN
-		final List<Computer> computers = ComputerDAO.INSTANCE.getAll();
+		final List<Computer> computers = computerDAO.getAll();
 		// THEN
 		Assertions.assertThat(computers).isNotNull();
 		Assertions.assertThat(computers).isEmpty();
