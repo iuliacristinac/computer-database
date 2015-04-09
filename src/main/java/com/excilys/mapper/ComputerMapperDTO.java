@@ -10,7 +10,7 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.util.DateUtil;
 
-@Component
+@Component("ComputerMapperDTO")
 public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 	
 	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";

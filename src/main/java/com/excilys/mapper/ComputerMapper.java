@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-@Component
+@Component("ComputerMapper")
 public class ComputerMapper implements RowMapper<Computer> {
 
 	@Override

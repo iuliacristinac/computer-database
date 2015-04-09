@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.excilys.dto.CompanyDTO;
 import com.excilys.model.Company;
 
-@Component
+@Component("CompanyMapperDTO")
 public class CompanyMapperDTO implements IMapperDTO<Company, CompanyDTO>{
 	
 	@Override

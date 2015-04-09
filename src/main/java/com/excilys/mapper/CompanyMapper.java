@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.model.Company;
 
-@Component
+@Component("CompannyMapper")
 public class CompanyMapper implements RowMapper<Company> {
 
 	@Override
