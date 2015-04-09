@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +20,7 @@ import com.excilys.service.ComputerService;
 import com.excilys.util.DateUtil;
 
 @WebServlet(urlPatterns = "/editComputer")
-public class EditComputer extends HttpServlet {
+public class EditComputer extends AbstractServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory

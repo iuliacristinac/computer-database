@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.exception.DAOException;
@@ -26,62 +26,26 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 	private ComputerMapper computerMapper;
 	@Autowired
 	private ConnectionDB connectionDB;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
 	@Override
 	public Computer getbyId(Long id) {	
 		
-		final Connection connection = connectionDB.getInstance();
-		
-		String query = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
-		
-		Computer computer = null;
-		try {		
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setLong(1, id);
-		
-			ResultSet result = preparedStatement.executeQuery();
-		
-			if (result.first()){
-				computer = computerMapper.mapResultSetToModel(result);
-			}
-			
-		} catch (SQLException e) {
-			throw new DAOException("ComputerDAO_getById Exception!", e);
-		} finally {
-			connectionDB.closeConnection();
-		}
-		
-		return computer;
+		return jdbcTemplate.queryForObject("SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.id = ?", new Object[] { id }, computerMapper);
 	}
 
 	@Override
 	public List<Computer> getAll() {
 		
-		final Connection connection = connectionDB.getInstance();
+		return jdbcTemplate.query("SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id", computerMapper);
+	}
+
+	public List<Computer> getAllByCompany(Long id) {
 		
-		List<Computer> computers = new ArrayList<>();
-		
-		String query  = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
-		
-		try {
-			Statement statement = connection.createStatement();		
-	
-	        ResultSet resultSet = statement.executeQuery(query);
-	
-	        while ( resultSet.next() )
-	        {
-				Computer computer = computerMapper.mapResultSetToModel(resultSet);
-				computers.add(computer);  	
-	        }
-		} catch (SQLException e) {
-			throw new DAOException("ComputerDAO_getAll Exception!", e);
-		} finally {
-			connectionDB.closeConnection();
-		}
-		
-        return computers;
+		 return jdbcTemplate.query("SELECT * FROM computer WHERE company_id = ?", new Object[] { id }, computerMapper);
 	}
 
 	@Override
@@ -129,9 +93,7 @@ public class ComputerDAO implements IDAO<Computer, Long>{
             LOGGER.info("Computer {} successfully created", entity.getId());	
 		} catch (SQLException e) {
 			throw new DAOException("ComputerDAO_create Exception!", e);
-		} finally {
-			connectionDB.closeConnection();
-		}
+		} 
 	}
 
 	@Override
@@ -171,28 +133,13 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 			 LOGGER.info("Computer {} successfully updated", entity.getId());	
 		} catch (SQLException e) {
 			throw new DAOException("ComputerDAO_update Exception!", e);
-		} finally {
-			connectionDB.closeConnection();
 		}
 	}
 	
 	@Override
 	public void delete(Long id) {	
 		
-		final Connection connection = connectionDB.getInstance();
-		
-		String query = "DELETE FROM computer WHERE id = ?";
-	
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setLong(1, id);
-			preparedStatement.execute();	
-			connectionDB.commit();
-			LOGGER.info("Computer {} successfully deleted", id);	
-		} catch (SQLException e) {
-			throw new DAOException("ComputerDAO_delete Exception!", e);
-		} finally {
-			connectionDB.closeConnection();
-		}
+		jdbcTemplate.update("DELETE FROM computer WHERE id = ?", id );
+		LOGGER.info("Computer {} successfully deleted", id);	
 	}
 }

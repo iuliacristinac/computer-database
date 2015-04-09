@@ -4,16 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 @Component
-public class ComputerMapper implements IMapper<Computer> {
+public class ComputerMapper implements RowMapper<Computer> {
 
 	@Override
-	public Computer mapResultSetToModel( ResultSet result) throws SQLException {
+	public Computer mapRow(ResultSet result, int arg1) throws SQLException {
 		 if (result == null) {
 			 throw new IllegalArgumentException("ComputerMapper - Null query result");
 		 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +13,7 @@ import com.excilys.mapper.ComputerMapperDTO;
 import com.excilys.service.ComputerService;
 
 @WebServlet(urlPatterns = "/dashboard")
-public class Dashboard extends HttpServlet {
+public class Dashboard extends AbstractServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -55,7 +54,11 @@ public class Dashboard extends HttpServlet {
 		request.setAttribute("page", p);
 		request.setAttribute("sizePage", entitiesByPage);
 		request.setAttribute("maxPages", maxPages);*/
+		
+		
 		request.setAttribute("computers", computerMapperDTO.modelsToDto(computerService.getAll()));
+		
+		
 //		request.setAttribute("currentPage", pge);
 //		request.setAttribute("total", totalEntities);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
