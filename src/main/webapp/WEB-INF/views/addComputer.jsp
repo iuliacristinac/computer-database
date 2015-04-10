@@ -11,7 +11,7 @@
 					<c:if test="${!empty message}">
 						<div class="has-error">${message}</div>
 					</c:if>
-					<form action="addComputer" method="POST">
+					<form commandName="newComputer" action="addComputer" method="POST">
 						<fieldset>
 						
 							<div class="form-group">

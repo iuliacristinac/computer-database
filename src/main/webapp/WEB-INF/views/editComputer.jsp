@@ -15,7 +15,7 @@
 					<c:if test="${!empty message}">
 						<div class="has-error">${message}</div>
 					</c:if>
-					<form action="editComputer" method="POST">
+					<form commandName="newComputer" action="editComputer" method="POST">
 						<input type="hidden" name="id" value="${computer.id}"/>
 						<fieldset>
 							<div class="form-group">

@@ -1,21 +1,22 @@
 package com.excilys.controller;
 
-import java.io.IOException;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.excilys.dto.ComputerDTO;
 import com.excilys.mapper.ComputerMapperDTO;
 import com.excilys.service.ComputerService;
 
-@WebServlet(urlPatterns = "/dashboard")
-public class Dashboard extends AbstractServlet {
-
-	private static final long serialVersionUID = 1L;
+@Controller
+@RequestMapping("/dashboard")
+public class Dashboard  {
 
 	@Autowired
 	private ComputerMapperDTO computerMapperDTO;
@@ -23,9 +24,8 @@ public class Dashboard extends AbstractServlet {
 	@Autowired
 	private ComputerService computerService;
 	
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.GET)
+	public void dashboard(Model model) {
 		
 		/*String page = request.getParameter("page");
 		String size = request.getParameter("size");
@@ -55,12 +55,15 @@ public class Dashboard extends AbstractServlet {
 		request.setAttribute("sizePage", entitiesByPage);
 		request.setAttribute("maxPages", maxPages);*/
 		
-		
-		request.setAttribute("computers", computerMapperDTO.modelsToDto(computerService.getAll()));
+		List<ComputerDTO> computers = new ArrayList<>();
+		computers =  computerMapperDTO.modelsToDto(computerService.getAll());
+		model.addAttribute("computers", computers);
+
+		//return new ModelAndView("dashboard", "computers", computers);
 		
 		
 //		request.setAttribute("currentPage", pge);
 //		request.setAttribute("total", totalEntities);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+//		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 }

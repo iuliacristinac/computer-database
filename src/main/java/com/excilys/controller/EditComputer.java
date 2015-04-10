@@ -1,120 +1,91 @@
 package com.excilys.controller;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.excilys.dto.ComputerDTO;
+import com.excilys.mapper.CompanyMapperDTO;
+import com.excilys.mapper.ComputerMapperDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
-import com.excilys.util.DateUtil;
 
-@WebServlet(urlPatterns = "/editComputer")
-public class EditComputer extends AbstractServlet {
+@Controller
+@RequestMapping("/editComputer")
+public class EditComputer {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = LoggerFactory
+	static final Logger LOGGER = LoggerFactory
 			.getLogger(EditComputer.class);
 
 	@Autowired
 	private CompanyService companyService;
-	
 	@Autowired
 	private ComputerService computerService;
+	@Autowired
+	private CompanyMapperDTO companyMapperDTO;
+	@Autowired
+	private ComputerMapperDTO computerMapperDTO;
 	
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		if (id != null) {
-			id = id.trim();
-			if (!id.isEmpty()) {
-				Long idComputer = Long.valueOf(id);
-				request.setAttribute("computer",
-						computerService.getById(idComputer));
-			}
-		}
-//		request.setAttribute("companiesId",
-//				CompanyService.INSTANCE.getAllCompaniesId());
-//		getServletContext().getRequestDispatcher(
-//				"/WEB-INF/views/editComputer.jsp").forward(request, response);
+	@RequestMapping(method=RequestMethod.GET)
+	protected void editComputerGET(@ModelAttribute("id") Long id, Model model) {
+		model.addAttribute("computer",
+				computerMapperDTO.mapModelToDTO(computerService.getById(id)));
+		model.addAttribute("companies", 
+				companyMapperDTO.modelsToDto(companyService.getAll()));
 	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String id = req.getParameter("id");
-		String name = req.getParameter("name");
-		String introduced = req.getParameter("introduced");
-		String discontinued = req.getParameter("discontinued");
-		String companyId = req.getParameter("companyId");
-		Long computerId;
-		if (id != null) {
-			id = id.trim();
-			if (!id.isEmpty()) {
-				computerId = Long.valueOf(id);
-			} else {
-				return;
-				// erreur 500
-			}
-		} else {
-			return;
-			// erreur 500
+	
+	@RequestMapping(method = RequestMethod.POST)
+	protected String editComputerPOST(@ModelAttribute("newComputer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
+		
+		if (bindingResult.hasErrors()) {
+				return "editComputer";
 		}
+		
+		Long id = newComputer.getId();
+		String name = newComputer.getName();
+		String introduced = newComputer.getIntroduced();
+		String discontinued = newComputer.getDiscontinued();
+		Long companyId = newComputer.getCompanyId();
 		if (name != null) {
 			name = name.trim();
 			if (name.isEmpty()) {
-				LOGGER.error("Editing computer failed because of empty name");
-				req.setAttribute("message", "Name is mandatory");
-				getServletContext().getRequestDispatcher(
-						"/WEB-INF/views/editComputer.jsp").forward(req, resp);
-				return;
+				LOGGER.error("Adding computer failed because of empty name");
+				model.addAttribute("companies", companyMapperDTO
+						.modelsToDto(companyService.getAll()));
+				model.addAttribute("message", "Name is mandatory");
+				return "editComputer";
 			}
 		} else {
-			LOGGER.error("Editing computer failed because of null name");
-			req.setAttribute("message", "Name is mandatory");
-			getServletContext().getRequestDispatcher(
-					"/WEB-INF/views/editComputer.jsp").forward(req, resp);
-			return;
+			LOGGER.error("Adding computer failed because of null name");
+			model.addAttribute("companies", companyMapperDTO
+					.modelsToDto(companyService.getAll()));
+			model.addAttribute("message", "Name is mandatory");
+			return "editComputer";
 		}
-		DateTimeFormatter formatter = DateTimeFormatter
-				.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime introducedTime = null;
-		if (introduced != null) {
-			introduced = introduced.trim();
-			if (!introduced.isEmpty() ) {
-				introduced = DateUtil.convertToValidDate(introduced);
-				introducedTime = LocalDateTime.parse(introduced, formatter);
-			}
-		}
-		LocalDateTime discontinuedTime = null;
-		if (discontinued != null) {
-			discontinued = discontinued.trim();
-			if (!discontinued.isEmpty()) {
-				discontinued = DateUtil.convertToValidDate(discontinued);
-				discontinuedTime = LocalDateTime.parse(discontinued, formatter);
-			}
-		}
-		Company company = null;
+		final ComputerDTO dto = new ComputerDTO();
+		dto.setName(name);
 		if (companyId != null) {
-			companyId = companyId.trim();
-			if (!companyId.isEmpty()) {
-				Long compId = Long.valueOf(companyId);
-				company = companyService.getById(compId);
-			}
+			Company company = companyService.getById(companyId);
+			dto.setCompanyId(companyId);
+			dto.setCompanyName(company.getName());
 		}
-		computerService.update(new Computer(computerId, name,
-				introducedTime, discontinuedTime, company));
-		resp.sendRedirect("dashboard");
+		dto.setId(id);
+		dto.setName(name);
+		dto.setIntroduced(introduced);
+		dto.setDiscontinued(discontinued);
+		final Computer computer = computerMapperDTO.mapDTOToModel(dto);
+		computerService.update(computer);
+		LOGGER.info("Computer {} successfully updated ",
+				computer.getId());
+		
+		return "redirect:/dashboard";
 	}
 }
