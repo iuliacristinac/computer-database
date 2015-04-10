@@ -1,9 +1,11 @@
 package com.excilys.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -17,7 +19,6 @@ import com.excilys.persistance.ConnectionDB;
 
 public class DBUtil {
 	
-	private Connection testConnection;
 	private IDatabaseTester databaseTester;
 	private String url;
 	private String user;
@@ -25,13 +26,18 @@ public class DBUtil {
 	private String driver ;
 	
 	public DBUtil() {
-		System.setProperty("env", "TEST");
-//		
-//		testConnection = ConnectionDB.INSTANCE.getConnection();
-//		url = ConnectionDB.INSTANCE.getUrl();
-//		user = ConnectionDB.INSTANCE.getUser();
-//		password = ConnectionDB.INSTANCE.getPassword();
-//		driver = ConnectionDB.INSTANCE.getDriver();
+		final Properties properties = new Properties();
+		try (final InputStream is = ConnectionDB.class
+			.getClassLoader().getResourceAsStream("config-test.properties")) {
+			properties.load(is);
+			System.out.println("-------------------" + properties + "--------------");
+			driver = properties.getProperty("test.driver");
+			url = properties.getProperty("test.url");
+			user = properties.getProperty("test.username");
+			password = properties.getProperty("test.password");
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
 		
 		try {
 			RunScript.execute(url, user, password, "src/test/resources/testDB.sql", Charset.forName("UTF8"), false);

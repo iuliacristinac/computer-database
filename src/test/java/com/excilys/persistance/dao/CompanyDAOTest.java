@@ -17,8 +17,7 @@ import com.excilys.util.DBUtil;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:src/main/webapp/WEB-INF/application-context.xml")
-@ActiveProfiles("TEST")
+@ContextConfiguration(locations = "file:src/test/webapp/WEB-INF/application-test-context.xml")
 public class CompanyDAOTest {
 
 	private static DBUtil dbUtil;
