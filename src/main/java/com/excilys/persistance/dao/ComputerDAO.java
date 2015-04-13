@@ -17,17 +17,15 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.exception.DAOException;
-import com.excilys.mapper.ComputerMapper;
+import com.excilys.mapper.IMapper;
 import com.excilys.model.Computer;
-import com.excilys.persistance.ConnectionDB;
 
 @Repository
 public class ComputerDAO implements IDAO<Computer, Long>{
  
 	@Autowired
-	private ComputerMapper computerMapper;
-	@Autowired
-	private ConnectionDB connectionDB;
+	private IMapper<Computer> computerMapper;
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	

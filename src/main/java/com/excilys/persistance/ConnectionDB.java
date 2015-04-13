@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.excilys.exception.ConnectionException;
 import com.jolbox.bonecp.BoneCPDataSource;
 
-@Component("ConnectionDB")
+@Component
 public class ConnectionDB {
 
 	@Autowired

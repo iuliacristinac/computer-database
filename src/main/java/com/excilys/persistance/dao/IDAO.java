@@ -1,28 +1,33 @@
 package com.excilys.persistance.dao;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
+
+import com.excilys.model.Computer;
 
 public interface IDAO<T, I extends Serializable> {
 	
-	default List<T> getAll() throws SQLException {
+	default List<T> getAll() {
 		throw new UnsupportedOperationException();
 	}
 	
-	default T getbyId( I id) throws SQLException {
+	default T getbyId( I id) {
 		throw new UnsupportedOperationException();
 	}
 	
-	default void create( T entity) throws SQLException {
+	default void create( T entity) {
 		throw new UnsupportedOperationException();
 	}
 	
-	default void update( T entity) throws SQLException {
+	default void update( T entity) {
 		throw new UnsupportedOperationException();
 	}
 	
-	default void delete( I id) throws SQLException {
+	default void delete( I id) {
+		throw new UnsupportedOperationException();
+	}
+
+	default List<Computer> getAllByCompany(Long id){
 		throw new UnsupportedOperationException();
 	}
 }

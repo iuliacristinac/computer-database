@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.exception.ServiceException;
 import com.excilys.model.Computer;
-import com.excilys.persistance.dao.ComputerDAO;
+import com.excilys.persistance.dao.IDAO;
 
 @Service
 public class ComputerService implements IService<Computer, Long>{
 	
 	@Autowired
-	private ComputerDAO computerDAO;
+	private IDAO<Computer, Long> computerDAO;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 	
@@ -51,6 +51,7 @@ public class ComputerService implements IService<Computer, Long>{
 		LOGGER.info("Computer {} successfully deleted", id);	
 	}
 
+	@Override
 	public Computer getById(Long id) {
 		if (id <= 0) {
 			throw new ServiceException("ComputerService_getbyId - Invalid id!");

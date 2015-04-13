@@ -8,23 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.mapper.CompanyMapper;
-import com.excilys.mapper.ComputerMapper;
+import com.excilys.mapper.IMapper;
 import com.excilys.model.Company;
-import com.excilys.persistance.ConnectionDB;
 
-@Repository("CompanyDAO")
+@Repository
 public class CompanyDAO implements IDAO<Company, Long> {
-	
 
 	@Autowired
-	private CompanyMapper companyMapper;
-	@Autowired
-	private ComputerMapper computerMapper;
-	@Autowired
-	private ComputerDAO computerDAO;
-	@Autowired
-	private ConnectionDB connectionDB;
+	private IMapper<Company> companyMapper;
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
@@ -36,20 +28,17 @@ public class CompanyDAO implements IDAO<Company, Long> {
 	
 	@Override
 	public Company getbyId(Long id) {	
-
-	return jdbcTemplate.queryForObject(GET_BY_ID_SQL, new Object[] { id }, companyMapper);
+		return jdbcTemplate.queryForObject(GET_BY_ID_SQL, new Object[] { id }, companyMapper);
 	}
 
 	@Override
 	public List<Company> getAll() {		
-		
-
-	return jdbcTemplate.query(GET_ALL_SQL, companyMapper);
+		return jdbcTemplate.query(GET_ALL_SQL, companyMapper);
 	}
 	
 	@Override
 	public void delete(Long id) {	
-		
+	
 		jdbcTemplate.update(DELETE_SQL, id);
 		LOGGER.info("Company {} successfully deleted", id);	
 	}

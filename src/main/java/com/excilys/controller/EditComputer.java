@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
-import com.excilys.mapper.CompanyMapperDTO;
-import com.excilys.mapper.ComputerMapperDTO;
+import com.excilys.mapper.IMapperDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.service.CompanyService;
-import com.excilys.service.ComputerService;
+import com.excilys.service.IService;
 
 @Controller
 @RequestMapping("/editComputer")
@@ -26,13 +25,16 @@ public class EditComputer {
 			.getLogger(EditComputer.class);
 
 	@Autowired
-	private CompanyService companyService;
+	private IMapperDTO<Company, CompanyDTO> companyMapperDTO;
+	
 	@Autowired
-	private ComputerService computerService;
+	private IMapperDTO<Computer, ComputerDTO> computerMapperDTO;
+	
 	@Autowired
-	private CompanyMapperDTO companyMapperDTO;
+	private IService<Company, Long> companyService;
+	
 	@Autowired
-	private ComputerMapperDTO computerMapperDTO;
+	private IService<Computer, Long> computerService;
 	
 	@RequestMapping(method=RequestMethod.GET)
 	protected void editComputerGET(@ModelAttribute("id") Long id, Model model) {

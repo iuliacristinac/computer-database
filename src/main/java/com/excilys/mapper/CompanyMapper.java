@@ -3,13 +3,12 @@ package com.excilys.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.model.Company;
 
-@Component("CompannyMapper")
-public class CompanyMapper implements RowMapper<Company> {
+@Component
+public class CompanyMapper implements IMapper<Company> {
 
 	@Override
 	public Company mapRow(ResultSet result, int arg1) throws SQLException {

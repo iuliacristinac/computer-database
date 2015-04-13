@@ -9,7 +9,7 @@ public interface IService<T, I extends Serializable> {
 		throw new UnsupportedOperationException();
 	}
 	
-	default T getbyId( I id) {
+	default T getById(I id) {
 		throw new UnsupportedOperationException();
 	}
 	

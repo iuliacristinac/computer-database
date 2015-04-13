@@ -2,12 +2,10 @@ package com.excilys.controller;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
-import com.excilys.mapper.CompanyMapperDTO;
-import com.excilys.mapper.ComputerMapperDTO;
+import com.excilys.mapper.IMapperDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.service.CompanyService;
-import com.excilys.service.ComputerService;
+import com.excilys.service.IService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +28,16 @@ public class AddComputer {
 			.getLogger(AddComputer.class);
 	
 	@Autowired
-	private CompanyMapperDTO companyMapperDTO;
-	@Autowired
-	private ComputerMapperDTO computerMapperDTO;
+	private IMapperDTO<Company, CompanyDTO> companyMapperDTO;
 	
 	@Autowired
-	private CompanyService companyService;
+	private IMapperDTO<Computer, ComputerDTO> computerMapperDTO;
 	
 	@Autowired
-	private ComputerService computerService;
+	private IService<Company, Long> companyService;
+	
+	@Autowired
+	private IService<Computer, Long> computerService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public void  addComputerGET(Model model) {

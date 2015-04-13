@@ -4,14 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-@Component("ComputerMapper")
-public class ComputerMapper implements RowMapper<Computer> {
+@Component
+public class ComputerMapper implements IMapper<Computer> {
 
 	@Override
 	public Computer mapRow(ResultSet result, int arg1) throws SQLException {

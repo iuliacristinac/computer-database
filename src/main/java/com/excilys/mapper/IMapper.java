@@ -3,8 +3,9 @@ package com.excilys.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public interface IMapper<T> {
+import org.springframework.jdbc.core.RowMapper;
 
-	 T mapResultSetToModel(ResultSet result) throws SQLException;
-	 
+public interface IMapper<T> extends RowMapper<T> {
+
+	public T mapRow(ResultSet result, int arg1) throws SQLException;
 }

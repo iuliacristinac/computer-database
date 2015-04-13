@@ -22,7 +22,7 @@
 			destroy-method="close"
 			p:driverClass="${dev.driver}"
 			p:jdbcUrl="${dev.url}"
-			p:username="${dev.user}"
+			p:username="${dev.username}"
 			p:password="${dev.password}" 
 			p:maxConnectionsPerPartition="${dev.maxConnectionsPerPartition}"
 			p:minConnectionsPerPartition="${dev.minConnectionsPerPartition}"

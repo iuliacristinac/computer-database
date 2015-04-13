@@ -9,22 +9,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.excilys.exception.ServiceException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.persistance.dao.CompanyDAO;
-import com.excilys.persistance.dao.ComputerDAO;
+import com.excilys.persistance.dao.IDAO;
 
 @Service
 public class CompanyService implements IService<Company, Long> {
 	
 	@Autowired
-	private CompanyDAO companyDAO;
+	private IDAO<Company, Long> companyDAO;
 	@Autowired
-	private ComputerDAO computerDAO;
+	private IDAO<Computer, Long> computerDAO;
 
 	@Override
 	public List<Company> getAll() {
 		return companyDAO.getAll();
 	}
 
+	@Override
 	public Company getById(Long id) {
 		if (id <= 0) {
 			throw new ServiceException("CompanyService_getbyId - Invalid id!");
