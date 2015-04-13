@@ -31,10 +31,10 @@ public class DBUtil {
 			.getClassLoader().getResourceAsStream("config-test.properties")) {
 			properties.load(is);
 			System.out.println("-------------------" + properties + "--------------");
-			driver = properties.getProperty("test.driver");
-			url = properties.getProperty("test.url");
-			user = properties.getProperty("test.username");
-			password = properties.getProperty("test.password");
+			driver = properties.getProperty("test-driver");
+			url = properties.getProperty("test-url");
+			user = properties.getProperty("test-username");
+			password = properties.getProperty("test-password");
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
