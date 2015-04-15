@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
@@ -37,7 +38,9 @@ public class EditComputer {
 	private IService<Computer, Long> computerService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	protected void editComputerGET(@ModelAttribute("id") Long id, Model model) {
+	
+	protected void editComputerGET(@RequestParam ("id") long id, Model model) {
+		
 		model.addAttribute("computer",
 				computerMapperDTO.mapModelToDTO(computerService.getById(id)));
 		model.addAttribute("companies", 
@@ -45,17 +48,17 @@ public class EditComputer {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	protected String editComputerPOST(@ModelAttribute("newComputer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
+	protected String editComputerPOST(@ModelAttribute("computer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
 		
 		if (bindingResult.hasErrors()) {
 				return "editComputer";
 		}
 		
-		Long id = newComputer.getId();
+		long id = newComputer.getId();
 		String name = newComputer.getName();
 		String introduced = newComputer.getIntroduced();
 		String discontinued = newComputer.getDiscontinued();
-		Long companyId = newComputer.getCompanyId();
+		long companyId = newComputer.getCompanyId();
 		if (name != null) {
 			name = name.trim();
 			if (name.isEmpty()) {
@@ -74,7 +77,7 @@ public class EditComputer {
 		}
 		final ComputerDTO dto = new ComputerDTO();
 		dto.setName(name);
-		if (companyId != null) {
+		if (companyId > 0) {
 			Company company = companyService.getById(companyId);
 			dto.setCompanyId(companyId);
 			dto.setCompanyName(company.getName());

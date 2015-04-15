@@ -16,6 +16,9 @@ public class DeleteComputer {
 	
 	@RequestMapping("deleteComputer")
     public String delete(@RequestParam("id") Long id) {
+		if (id == null) {
+			return "404";
+		}
         computerService.delete(id);
         return "redirect:/dashboard";
     }

@@ -1,12 +1,24 @@
 package com.excilys.dto;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class ComputerDTO {
 
 	private long id;
+
+	@NotBlank
+	@Size(min=0, max=100)
 	private String name;
+	
 	private String introduced;
-	private String discontinued;
+	
+	private String discontinued;	
+
 	private long companyId;
+	
+	@Size(min=0, max=100)
 	private String companyName;
 	
 	public long getId() {
@@ -44,6 +56,5 @@ public class ComputerDTO {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
-	}
-	
+	}	
 }

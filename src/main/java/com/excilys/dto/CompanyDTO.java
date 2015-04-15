@@ -1,8 +1,12 @@
 package com.excilys.dto;
 
+import javax.validation.constraints.Size;
+
 public class CompanyDTO {
 	
 	private long id;
+
+	@Size(min=0, max=100)
 	private String name;
 	
 	public CompanyDTO() {}
@@ -12,7 +16,7 @@ public class CompanyDTO {
 	}
 	
 	public void setId(long id) {
-		if (id <= 0) {
+		if (id < 0) {
 			throw new IllegalArgumentException("CompanyDTO - Invalid Id!");
 		}
 		this.id = id;

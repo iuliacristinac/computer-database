@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/addComputer")
 public class AddComputer {
@@ -40,15 +42,16 @@ public class AddComputer {
 	private IService<Computer, Long> computerService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public void  addComputerGET(Model model) {
+	public String  addComputerGET(@ModelAttribute("newComputer") ComputerDTO newComputer, Model model) {
 		List<CompanyDTO> companies = new ArrayList<>();
 		companies = companyMapperDTO.modelsToDto(companyService.getAll());
 		model.addAttribute("companies", companies);
+		return "addComputer";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	protected String addComputerPOST(@ModelAttribute("newComputer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
-		
+	protected String addComputerPOST(@Valid @ModelAttribute("newComputer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
+
 		if (bindingResult.hasErrors()) {
 				return "addComputer";
 		}
@@ -56,7 +59,7 @@ public class AddComputer {
 		String name = newComputer.getName();
 		String introduced = newComputer.getIntroduced();
 		String discontinued = newComputer.getDiscontinued();
-		Long companyId = newComputer.getCompanyId();
+		long companyId = newComputer.getCompanyId();
 		if (name != null) {
 			name = name.trim();
 			if (name.isEmpty()) {
@@ -74,7 +77,7 @@ public class AddComputer {
 			return "addComputer";
 		}
 		final ComputerDTO dto = new ComputerDTO();
-		if (companyId != null) {
+		if (companyId > 0 ) {
 			final Company company = companyService.getById(companyId);
 			dto.setCompanyId(companyId);
 			dto.setCompanyName(company.getName());
