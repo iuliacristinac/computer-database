@@ -16,14 +16,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/addComputer")
+@SessionAttributes("companies")
 public class AddComputer {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -40,12 +41,14 @@ public class AddComputer {
 	
 	@Autowired
 	private IService<Computer, Long> computerService;
+	
+	@ModelAttribute("companies")
+	private List<CompanyDTO> getCompanies() {
+		return companyMapperDTO.modelsToDto(companyService.getAll());
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String  addComputerGET(@ModelAttribute("newComputer") ComputerDTO newComputer, Model model) {
-		List<CompanyDTO> companies = new ArrayList<>();
-		companies = companyMapperDTO.modelsToDto(companyService.getAll());
-		model.addAttribute("companies", companies);
+	protected String  addComputerGET(@ModelAttribute("newComputer") ComputerDTO newComputer, Model model) {
 		return "addComputer";
 	}
 
@@ -64,15 +67,11 @@ public class AddComputer {
 			name = name.trim();
 			if (name.isEmpty()) {
 				LOGGER.error("Adding computer failed because of empty name");
-				model.addAttribute("companies", companyMapperDTO
-						.modelsToDto(companyService.getAll()));
 				model.addAttribute("message", "Name is mandatory");
 				return "addComputer";
 			}
 		} else {
 			LOGGER.error("Adding computer failed because of null name");
-			model.addAttribute("companies", companyMapperDTO
-					.modelsToDto(companyService.getAll()));
 			model.addAttribute("message", "Name is mandatory");
 			return "addComputer";
 		}

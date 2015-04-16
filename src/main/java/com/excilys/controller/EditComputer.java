@@ -1,5 +1,7 @@
 package com.excilys.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
@@ -20,6 +23,7 @@ import com.excilys.service.IService;
 
 @Controller
 @RequestMapping("/editComputer")
+@SessionAttributes("companies")
 public class EditComputer {
 
 	static final Logger LOGGER = LoggerFactory
@@ -37,14 +41,16 @@ public class EditComputer {
 	@Autowired
 	private IService<Computer, Long> computerService;
 	
-	@RequestMapping(method=RequestMethod.GET)
 	
-	protected void editComputerGET(@RequestParam ("id") long id, Model model) {
-		
+	@ModelAttribute("companies")
+	private List<CompanyDTO> getCompanies() {
+		return companyMapperDTO.modelsToDto(companyService.getAll());
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)	
+	protected void editComputerGET(@RequestParam ("id") long id, Model model) {	
 		model.addAttribute("computer",
 				computerMapperDTO.mapModelToDTO(computerService.getById(id)));
-		model.addAttribute("companies", 
-				companyMapperDTO.modelsToDto(companyService.getAll()));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -63,15 +69,11 @@ public class EditComputer {
 			name = name.trim();
 			if (name.isEmpty()) {
 				LOGGER.error("Adding computer failed because of empty name");
-				model.addAttribute("companies", companyMapperDTO
-						.modelsToDto(companyService.getAll()));
 				model.addAttribute("message", "Name is mandatory");
 				return "editComputer";
 			}
 		} else {
 			LOGGER.error("Adding computer failed because of null name");
-			model.addAttribute("companies", companyMapperDTO
-					.modelsToDto(companyService.getAll()));
 			model.addAttribute("message", "Name is mandatory");
 			return "editComputer";
 		}

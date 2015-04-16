@@ -1,14 +1,15 @@
-<%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib tagdir="/WEB-INF/tags/" prefix="p"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="p" %>
 <c:import url="head.jsp" />
 
 <c:import url="header.jsp" />
 <section id="main">
 	<div class="container">
-		<h1 id="homeTitle"> ${fn:length(computers)} Computers found </h1>
+		<h1 id="homeTitle"> ${fn:length(computers)} <spring:message code="dashboard.ComputersFound" /></h1>
 		<div id="actions" class="form-horizontal">
 <!-- 				<div class="pull-left"> -->
 <!-- 					<form id="searchForm" action="#" method="GET" class="form-inline"> -->
@@ -20,8 +21,9 @@
 <!-- 				</div> -->
 			<div class="pull-right">
 				<a class="btn btn-success" id="addComputer"
-					href="<c:url value="/addComputer" />">Add Computer</a>
+					href="<c:url value="/addComputer" />"><spring:message code="common.AddComputer" /></a>
 			</div>
+
 		</div>
 	</div>
 	<form id="deleteForm" action="#" method="POST">
@@ -31,11 +33,15 @@
 		<table class="table table-striped table-bordered">
 			<thead>
 				<tr>
-					<th>Computer name</th>
-					<th>Introduced date</th>
-					<th>Discontinued date</th>
-					<th>Company</th>
-					<th>Edit/Delete</th>
+					<th><spring:message code="form.ComputerName" /></th>
+					<th><spring:message code="form.Introduced" /></th>
+					<th><spring:message code="form.Discontinued" /></th>
+					<th><spring:message code="form.Company" /></th>
+					<th>
+						<spring:message code="common.Edit" />
+						 / 
+						<spring:message code="common.Delete" />
+					</th>
 				</tr>
 			</thead>
 			<tbody id="results">
@@ -55,9 +61,13 @@
 								</c:if>
 							</td>
 							<td>
-           						<a href="<c:url value="/editComputer?id=${computer.id}" />" class="btn btn-sm btn-info">Edit</a>
-          							<a href="<c:url value="/deleteComputer?id=${computer.id}" />" class="btn btn-sm btn-danger" onclick="confirmMessage()">Delete</a>
-         						</td>
+           						<a href="<c:url value="/editComputer?id=${computer.id}" />" class="btn btn-sm btn-info">
+           							<spring:message code="common.Edit" />
+           						</a>
+          						<a href="<c:url value="/deleteComputer?id=${computer.id}" />" class="btn btn-sm btn-danger" onclick=" return confirmMessage()">
+          							<spring:message code="common.Delete" />
+          						</a>
+         					</td>
 
 						</tr>
 					</tbody>
@@ -71,11 +81,11 @@
 <%-- 			pageCount="${maxPages}" pageSize="${page.size}" url="/dashboard" --%>
 <%-- 			previous="${page.previous}" /> --%>
 <!-- 	</footer> -->
+
+<spring:message code="delete.DeleteMessage" var="deleteMessage" />
 <script>
  function confirmMessage() {
-   if (confirm("Are you sure you want to delete this computer?")) {
-     window.location.href = "/deleteComputer?id=${computer.id}";
-   }
+ 	return confirm("${deleteMessage}");
  }
 </script>
 	<c:import url="footer.jsp" />
