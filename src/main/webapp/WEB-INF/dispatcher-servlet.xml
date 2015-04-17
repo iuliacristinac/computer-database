@@ -23,14 +23,8 @@
 	
 	<mvc:resources mapping="/static/**" location="/static/" />
  
- 	<mvc:annotation-driven />
+ 	<mvc:annotation-driven validator="validator" />
 
- 	<bean id="messageSource"
-        class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="messages/messages" />
-        <property name="defaultEncoding" value="UTF-8" />
-    </bean>
- 
     <bean id="localeResolver"
         class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="en" />

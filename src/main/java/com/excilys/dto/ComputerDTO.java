@@ -4,6 +4,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.excilys.util.ValidDateFormat;
+
 public class ComputerDTO {
 
 	private long id;
@@ -12,8 +14,10 @@ public class ComputerDTO {
 	@Size(min=0, max=100)
 	private String name;
 	
+	@ValidDateFormat
 	private String introduced;
 	
+	@ValidDateFormat
 	private String discontinued;	
 
 	private long companyId;

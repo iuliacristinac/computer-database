@@ -3,6 +3,9 @@ package com.excilys.mapper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.excilys.dto.ComputerDTO;
@@ -12,19 +15,26 @@ import com.excilys.util.DateUtil;
 
 @Component
 public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
-	
-	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
+	@Autowired
+	private DateUtil dateUtil;
+	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@Override
 	public ComputerDTO mapModelToDTO(Computer model) {
 		if ( model == null) {
 			throw new IllegalArgumentException("ComputerMapperDTO - Invalid Model!");
 		}
+		
+		String datePattern = messageSource.getMessage("date.DatePattern", null, LocaleContextHolder.getLocale());
+		
 		final ComputerDTO computerDTO = new ComputerDTO();
 		computerDTO.setId(model.getId());
 		computerDTO.setName(model.getName());
 		
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
 		
 		if (model.getIntroduced() != null) {
 			computerDTO.setIntroduced(model.getIntroduced().format(formatter));
@@ -45,23 +55,25 @@ public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 			throw new IllegalArgumentException("ComputeryMapperDTO - Invalid DTO!");
 		}
 		
+		String datePattern = messageSource.getMessage("date.DatePattern", null, LocaleContextHolder.getLocale());
+		
 		final Computer computer = new Computer();
 		computer.setId(dto.getId());
 		computer.setName(dto.getName());
 		
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
 		
 		if (dto.getIntroduced() != null) {
 			dto.setIntroduced( dto.getIntroduced().trim());
 			if (!dto.getIntroduced().isEmpty()) {
-				dto.setIntroduced( DateUtil.convertToValidDate(dto.getIntroduced()));
-				computer.setIntroduced(LocalDateTime.parse(dto.getIntroduced(),formatter));
+//				dto.setIntroduced( dateUtil.convertToValidDate(dto.getIntroduced()));
+				computer.setIntroduced(LocalDateTime.parse(dto.getIntroduced(), formatter));
 			}
 		}
 		if (dto.getDiscontinued() != null) {
 			dto.setDiscontinued(dto.getDiscontinued().trim());
 			if (!dto.getDiscontinued().isEmpty()) {
-				dto.setDiscontinued( DateUtil.convertToValidDate(dto.getDiscontinued()));
+//				dto.setDiscontinued( dateUtil.convertToValidDate(dto.getDiscontinued()));
 				computer.setDiscontinued(LocalDateTime.parse(dto.getDiscontinued(), formatter));
 			}
 		}

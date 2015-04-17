@@ -49,13 +49,8 @@
 					<tbody>
 						<tr>
 							<td><a href="<c:url value="/showComputer?id=${computer.id}" />"><c:out value="${computer.name}" /></a></td>
-							<td>
-								<fmt:parseDate value="${computer.introduced}" var="introducedDate" pattern="yyyy-MM-dd HH:mm" /> 
-								<fmt:formatDate value="${introducedDate}" type="Date" dateStyle="full" /></td>
-							<td>
-								<fmt:parseDate value="${computer.discontinued}" var="discontinuedDate" pattern="yyyy-MM-dd HH:mm" /> 
-								<fmt:formatDate value="${discontinuedDate}" type="Date" dateStyle="full" />
-							</td>
+							<td><c:out value="${computer.introduced}" /></td>
+							<td><c:out value="${computer.discontinued}" /></td>
 							<td><c:if test="${!empty computer.companyId}">
 									<c:out value="${computer.companyName}" />
 								</c:if>

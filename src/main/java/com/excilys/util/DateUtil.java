@@ -1,17 +1,25 @@
 package com.excilys.util;
 
-public class DateUtil {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-	public static String convertToValidDate( String date){
-		
-		if ( Validator.isValidDateHour(date)) {
-			return date;
+@Component
+public class DateUtil {
+	
+	@Autowired
+	private ValidatorDate validator;
+
+	public String convertToValidDate( String date){
+		if ( validator.isValidDate(date)) {
+			return date + " " + "00:00:00";
 		}
-		else {
-				if (Validator.isValidDate(date)){
-					return date + " " + "00:00:00";
-			}
+		return date;
+	}
+	
+	public boolean isValidDate( String date) {
+		if ( validator.isValidDateHour(date) || validator.isValidDate(date)) {
+			return true;
 		}
-		throw new IllegalArgumentException("ComputerMapperDTO - Invalid Date!");
+		return false;
 	}
 }

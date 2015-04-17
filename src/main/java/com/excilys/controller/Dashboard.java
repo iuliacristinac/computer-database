@@ -32,7 +32,7 @@ public class Dashboard  {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public void dashboard(Locale locale,Model model) {
-		
+			
 		/*String page = request.getParameter("page");
 		String size = request.getParameter("size");
 		int currentPage = 1, entitiesByPage = 10, pge = 1;

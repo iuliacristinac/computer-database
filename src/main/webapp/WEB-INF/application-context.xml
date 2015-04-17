@@ -12,9 +12,11 @@
 	http://www.springframework.org/schema/context/spring-context.xsd">
 	
 	<context:property-placeholder location="classpath:/config.properties" />
+	<context:component-scan base-package="com.excilys.util" />	
 	<context:component-scan base-package="com.excilys.mapper" />
 	<context:component-scan base-package="com.excilys.persistance" />
-	<context:component-scan base-package="com.excilys.service" />	
+	<context:component-scan base-package="com.excilys.service" />
+<!-- 	<context:spring-configured /> -->
 	
 	<beans>
 		<!-- JDBC Data Source for MySQL Database -->
@@ -34,6 +36,15 @@
 
 		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 			<property name="dataSource" ref="dataSource"/>
+		</bean>
+		
+		<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	        <property name="basename" value="messages/messages" />
+	        <property name="defaultEncoding" value="UTF-8" />
+    	</bean>
+    
+    	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+			<property name="validationMessageSource" ref="messageSource"/>
 		</bean>
 		
 		<tx:annotation-driven proxy-target-class="true"/>
