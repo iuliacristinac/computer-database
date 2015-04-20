@@ -48,12 +48,12 @@ public class AddComputer {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected String  addComputerGET(@ModelAttribute("newComputer") ComputerDTO newComputer, Model model) {
+	public String  addComputerGET(@ModelAttribute("newComputer") ComputerDTO newComputer, Model model) {
 		return "addComputer";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	protected String addComputerPOST(@Valid @ModelAttribute("newComputer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
+	public String addComputerPOST(@Valid @ModelAttribute("newComputer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
 
 		if (bindingResult.hasErrors()) {
 				return "addComputer";

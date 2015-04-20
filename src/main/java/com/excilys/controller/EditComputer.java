@@ -48,13 +48,13 @@ public class EditComputer {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)	
-	protected void editComputerGET(@RequestParam ("id") long id, Model model) {	
+	public void editComputerGET(@RequestParam ("id") long id, Model model) {	
 		model.addAttribute("computer",
 				computerMapperDTO.mapModelToDTO(computerService.getById(id)));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	protected String editComputerPOST(@ModelAttribute("computer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
+	public String editComputerPOST(@ModelAttribute("computer") ComputerDTO newComputer, BindingResult bindingResult, Model model) {
 		
 		if (bindingResult.hasErrors()) {
 				return "editComputer";

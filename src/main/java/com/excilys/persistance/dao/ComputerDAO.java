@@ -7,6 +7,10 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import org.hibernate.annotations.SQLInsert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +19,15 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.IMapper;
 import com.excilys.model.Computer;
+import com.excilys.model.QComputer;
+import com.excilys.model.QCompany;
+import com.mysema.query.jpa.impl.JPADeleteClause;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Repository
 public class ComputerDAO implements IDAO<Computer, Long>{
@@ -29,23 +38,21 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+	
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private static final String GET_BY_ID_SQL = "SELECT * FROM computer LEFT OUTER JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.id = ?";
-	
-	private static final String GET_ALL_SQL = "SELECT * FROM computer LEFT OUTER JOIN company "
-			+ "ON computer.company_id = company.id";
-	
-	private static final String GET_ALL_BY_COMPANY_SQL = "SELECT * FROM computer WHERE company_id = ?";
 	
 	private static final String INSERT_SQL = "INSERT INTO computer (name, introduced, discontinued, company_id)"
 			+ " VALUES ( ?, ?, ?, ?)";
 	
 	private static final String UPDATE_SQL = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?,"
 			+ " company_id = ? WHERE id = ? ";
-	
-	private static final String DELETE_SQL = "DELETE FROM computer WHERE id = ?";
+
 	
 	@Override
 	public Computer getbyId(Long id) {	
@@ -56,55 +63,60 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 	@Override
 	public List<Computer> getAll() {
 		
-		return jdbcTemplate.query(GET_ALL_SQL, computerMapper);
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(entityManager);
+		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
+		List<Computer> computers = query
+									.from(computer)
+									.leftJoin(computer.company, company)
+									.list(computer);
+		return computers;
 	}
 
 	public List<Computer> getAllByCompany(Long id) {
 		
-		 return jdbcTemplate.query(GET_ALL_BY_COMPANY_SQL, new Object[] { id }, computerMapper);
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(entityManager);
+		QComputer computer = QComputer.computer;
+		List<Computer> computers = query
+									.from(computer)
+									.where(computer.company.id.eq(id))
+									.list(computer);
+		return computers;
+
 	}
 
 	@Override
-	public void create(Computer entity) {		
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		PreparedStatementCreator  preparedStatementCreator = new PreparedStatementCreator() {
+	public void create(Computer entity) {	
+		
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) {
-				try {
-					PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL,
-							new String[] { "id" });
-					preparedStatement.setString(1, entity.getName());
-					
-					if (entity.getIntroduced() != null) {
-						preparedStatement.setTimestamp(2, Timestamp.valueOf(entity.getIntroduced()));		
-					}
-					else {
-						preparedStatement.setTimestamp(2, null);		
-					}
-					
-					if (entity.getDiscontinued() != null) {
-						preparedStatement.setTimestamp(3, Timestamp.valueOf(entity.getDiscontinued()));		
-					}
-					else {
-						preparedStatement.setTimestamp(3, null);
-					}
-					
-					
-					if (entity.getCompany() != null) {
-						preparedStatement.setLong(4, entity.getCompany().getId());
-					}
-					else {
-						preparedStatement.setObject(4, null);
-					} 
-					return preparedStatement;
-				} catch (SQLException e) {
-						throw new DAOException("ComputerDAO_create Exception!", e);
-				}
-			}
-		};
-		jdbcTemplate.update(preparedStatementCreator, keyHolder);
-		entity.setId((Long)keyHolder.getKey());
+		entityManager.persist(entity);
+		entityManager.flush();
+		entityManager.close();
+	        	
+	        	
+
+//			preparedStatement.setString(1, entity.getName());
+//			if (entity.getIntroduced() != null) {
+//			preparedStatement.setTimestamp(2, Timestamp.valueOf(entity.getIntroduced()));
+//			}
+//			else {
+//			preparedStatement.setTimestamp(2, null);
+//			}
+//			if (entity.getDiscontinued() != null) {
+//			preparedStatement.setTimestamp(3, Timestamp.valueOf(entity.getDiscontinued()));
+//			}
+//			else {
+//			preparedStatement.setTimestamp(3, null);
+//			}
+//			if (entity.getCompany() != null) {
+//			preparedStatement.setLong(4, entity.getCompany().getId());
+//			}
+//			else {
+//			preparedStatement.setObject(4, null);
+//			} 
 	    LOGGER.info("Computer {} successfully created", entity.getId());	
 	}
 
@@ -142,7 +154,11 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 	@Override
 	public void delete(Long id) {	
 		
-		jdbcTemplate.update(DELETE_SQL, id );
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		QComputer computer = QComputer.computer;
+
+		new JPADeleteClause(entityManager, computer)
+			.where(computer.id.eq(id)).execute();
 		LOGGER.info("Computer {} successfully deleted", id);	
 	}
 }

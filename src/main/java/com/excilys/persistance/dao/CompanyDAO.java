@@ -2,14 +2,19 @@ package com.excilys.persistance.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.mapper.IMapper;
 import com.excilys.model.Company;
+import com.excilys.model.QCompany;
+import com.mysema.query.jpa.impl.JPADeleteClause;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Repository
 public class CompanyDAO implements IDAO<Company, Long> {
@@ -18,28 +23,46 @@ public class CompanyDAO implements IDAO<Company, Long> {
 	private IMapper<Company> companyMapper;
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private EntityManagerFactory entityManagerFactory;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
-	
-	private static final String GET_BY_ID_SQL = "SELECT * FROM company WHERE id = ?";
-	private static final String GET_ALL_SQL = "SELECT * FROM company";
-	private static final String DELETE_SQL = "DELETE FROM company WHERE id = ?";
-	
+
 	@Override
-	public Company getbyId(Long id) {	
-		return jdbcTemplate.queryForObject(GET_BY_ID_SQL, new Object[] { id }, companyMapper);
+	public Company getbyId(Long id) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(entityManager);
+		QCompany company = QCompany.company;
+		Company result = query
+							.from(company)
+							.where(company.id.eq(id))
+							.uniqueResult(company);
+		
+		entityManager.close();
+		return result;
 	}
 
 	@Override
 	public List<Company> getAll() {		
-		return jdbcTemplate.query(GET_ALL_SQL, companyMapper);
+
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(entityManager);
+		QCompany company = QCompany.company;
+		List<Company> companies = query
+								  	.from(company)
+								  	.list(company);
+		entityManager.close();
+		return companies;
 	}
 	
 	@Override
 	public void delete(Long id) {	
 	
-		jdbcTemplate.update(DELETE_SQL, id);
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		QCompany company = QCompany.company;
+
+		new JPADeleteClause(entityManager, company)
+			.where(company.id.eq(id)).execute();
+		
 		LOGGER.info("Company {} successfully deleted", id);	
 	}
 }
