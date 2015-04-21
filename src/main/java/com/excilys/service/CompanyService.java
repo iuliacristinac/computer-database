@@ -20,11 +20,13 @@ public class CompanyService implements IService<Company, Long> {
 	private IDAO<Computer, Long> computerDAO;
 
 	@Override
+	@Transactional(readOnly=true)
 	public List<Company> getAll() {
 		return companyDAO.getAll();
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Company getById(Long id) {
 		if (id <= 0) {
 			throw new ServiceException("CompanyService_getbyId - Invalid id!");

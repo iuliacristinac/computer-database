@@ -22,5 +22,4 @@ public class DeleteComputer {
         computerService.delete(id);
         return "redirect:/dashboard";
     }
-
 }
