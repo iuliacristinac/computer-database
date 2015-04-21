@@ -3,13 +3,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@ taglib tagdir="/WEB-INF/tags/" prefix="p" %>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="mylib" %>
 <c:import url="head.jsp" />
 
 <c:import url="header.jsp" />
 <section id="main">
 	<div class="container">
-		<h1 id="homeTitle"> ${fn:length(computers)} <spring:message code="dashboard.ComputersFound" /></h1>
+	 <h1 id="homeTitle"> ${totalEntities} <spring:message code="dashboard.ComputersFound" /> </h1>
 		<div id="actions" class="form-horizontal">
 <!-- 				<div class="pull-left"> -->
 <!-- 					<form id="searchForm" action="#" method="GET" class="form-inline"> -->
@@ -71,11 +71,12 @@
 		</table>
 	</div>
 </section>
-<!-- 	<footer class="navbar-fixed-bottom"> -->
-<%-- 		<p:paginator totalPages="${totalPages}" page="${page.page}" --%>
-<%-- 			pageCount="${maxPages}" pageSize="${page.size}" url="/dashboard" --%>
-<%-- 			previous="${page.previous}" /> --%>
-<!-- 	</footer> -->
+
+<footer class="navbar-fixed-bottom">
+	<mylib:pageable numberOfPages="${page.numberOfPages}" page="${page.currentPage}"
+				previous="${page.previous}" next="${page.next}" 
+				url="/dashboard" /> 
+</footer>
 
 <spring:message code="delete.DeleteMessage" var="deleteMessage" />
 <script>

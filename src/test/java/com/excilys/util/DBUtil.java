@@ -14,7 +14,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.tools.RunScript;
 
-import com.excilys.persistance.ConnectionDB;
+//import com.excilys.persistance.ConnectionDB;
 
 
 public class DBUtil {
@@ -26,18 +26,18 @@ public class DBUtil {
 	private String driver ;
 	
 	public DBUtil() {
-		final Properties properties = new Properties();
-		try (final InputStream is = ConnectionDB.class
-			.getClassLoader().getResourceAsStream("config-test.properties")) {
-			properties.load(is);
-			System.out.println("-------------------" + properties + "--------------");
-			driver = properties.getProperty("test-driver");
-			url = properties.getProperty("test-url");
-			user = properties.getProperty("test-username");
-			password = properties.getProperty("test-password");
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}
+//		final Properties properties = new Properties();
+//		try (final InputStream is = ConnectionDB.class
+//			.getClassLoader().getResourceAsStream("config-test.properties")) {
+//			properties.load(is);
+//			System.out.println("-------------------" + properties + "--------------");
+//			driver = properties.getProperty("test-driver");
+//			url = properties.getProperty("test-url");
+//			user = properties.getProperty("test-username");
+//			password = properties.getProperty("test-password");
+//		} catch (IOException e) {
+//			System.err.println(e.getMessage());
+//		}
 		
 		try {
 			RunScript.execute(url, user, password, "src/test/resources/testDB.sql", Charset.forName("UTF8"), false);

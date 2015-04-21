@@ -37,6 +37,18 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	@Override
+	public Long count() {
+		
+		HibernateQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
+		QComputer computer = QComputer.computer;
+		Long nbComputers = query
+				.from(computer)
+				.count();
+		
+		return nbComputers;
+	}
+	
+	@Override
 	public Computer getbyId(Long id) {	
 		
 		if (id == null || id < 0) {

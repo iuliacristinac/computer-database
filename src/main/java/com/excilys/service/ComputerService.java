@@ -20,6 +20,13 @@ public class ComputerService implements IService<Computer, Long>{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 	
+	
+	@Override
+	@Transactional(readOnly=true)
+	public Long count() {
+		return computerDAO.count();
+	}
+	
 	@Override
 	@Transactional(readOnly=true)
 	public List<Computer> getAll() {

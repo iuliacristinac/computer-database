@@ -10,32 +10,38 @@ public class Page {
 	private static final int ELEMENTS_BY_PAGE = 10;
 	private int currentPage;
 	private int numberOfPages;
+	private int size;
+	private boolean previous;
+	private boolean next;
 	
 	public Page() {
-		currentPage = 0;
-		numberOfPages = 0;
+		currentPage = 1;
+		numberOfPages = 1;
+		size = ELEMENTS_BY_PAGE;
+		previous = false;
+		next = false;
 	}
 	
 	public Page (List<Computer> list) {
+		currentPage = 1;
+		size = ELEMENTS_BY_PAGE;
 		if (!list.isEmpty()) {
-			numberOfPages = list.size() / ELEMENTS_BY_PAGE;
-			if (list.size() % ELEMENTS_BY_PAGE != 0) {
+			numberOfPages = list.size() / size;
+			if (list.size() % size != 0) {
 				numberOfPages++;
 			}
-			currentPage = 1;
 		}
 		else {
-			currentPage = 0;
-			numberOfPages = 0;
+			numberOfPages = 1;
 		}
 	}
 
-	public List<Object> getElements(List<Object> list, int page) {
-		List<Object> elementsList = new ArrayList<>();
-		int fromIndex = (page - 1) * ELEMENTS_BY_PAGE;
-		int toIndex = fromIndex + ELEMENTS_BY_PAGE - 1;
-		if (toIndex <= (list.size() - 1)) {
-			toIndex = list.size() - 1;
+	public List<Computer> getElements(List<Computer> list, int page) {
+		List<Computer> elementsList = new ArrayList<>();
+		int fromIndex = (page - 1) * size;
+		int toIndex = fromIndex + size;
+		if (toIndex >= (list.size() )) {
+			toIndex = list.size();
 		}
 		elementsList = list.subList(fromIndex, toIndex);
 		return elementsList;
@@ -63,6 +69,30 @@ public class Page {
 
 	public void setNumberOfPages(int numberOfPages) {
 		this.numberOfPages = numberOfPages;
+	}
+	
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public boolean isPrevious() {
+		return previous;
+	}
+
+	public void setPrevious(boolean previous) {
+		this.previous = previous;
+	}
+
+	public boolean isNext() {
+		return next;
+	}
+
+	public void setNext(boolean next) {
+		this.next = next;
 	}
 
 	@Override

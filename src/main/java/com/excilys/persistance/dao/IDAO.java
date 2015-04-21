@@ -7,6 +7,10 @@ import com.excilys.model.Computer;
 
 public interface IDAO<T, I extends Serializable> {
 	
+	default I count() {
+		throw new UnsupportedOperationException();
+	}
+	
 	default List<T> getAll() {
 		throw new UnsupportedOperationException();
 	}
