@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<context:property-placeholder location="classpath:/config.properties" />
+	<context:component-scan base-package="com.excilys.persistence" />
+	
+	<beans>
+		<!-- JDBC Data Source for MySQL Database -->
+		<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"
+			p:driverClass="${dev.driver}"
+			p:jdbcUrl="${dev.url}"
+			p:username="${dev.username}"
+			p:password="${dev.password}" 
+			p:maxConnectionsPerPartition="${dev.maxConnectionsPerPartition}"
+			p:minConnectionsPerPartition="${dev.minConnectionsPerPartition}"
+			p:partitionCount="${dev.partitionCount}"/>
+
+		<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+			<property name="dataSource" ref="dataSource" />
+			<property name="packagesToScan">
+				<array>
+					<value>com.excilys.model</value>
+				</array>
+			</property>
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+					<prop key="hibernate.show_sql">true</prop>
+					<prop key="hibernate.format_sql">true</prop>
+				</props>
+			</property>
+		</bean>
+		
+		<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+	       		p:basename="messages/messages" 
+	        	p:defaultEncoding="UTF-8" />
+    
+    	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+				<property name="validationMessageSource" ref="messageSource"/>
+		</bean>
+		
+		 <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+				<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+		
+		<tx:annotation-driven transaction-manager="transactionManager" />
+	</beans>	
+</beans>
