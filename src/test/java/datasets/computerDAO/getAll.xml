@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<company id="1" name="Apple INC." />
+	<company id="2" name="Thinking Machines" />
+	
+	<computer id="1" name="MacBook Pro 15.4 inch" company_id="1" />
+	<computer id="2" name="CM-2a" company_id="2" />
+	<computer id="7" name="Apple IIe" />
+	<computer id="8" name="Apple IIc" />
+	<computer id="12" name="Apple III" introduced="1980-05-01" discontinued="1984-04-01" company_id="1" />
+	<computer id="15" name="Connection Machine" introduced="1987-01-01" company_id="2" />
+</dataset>
