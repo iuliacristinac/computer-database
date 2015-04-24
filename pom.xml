@@ -42,6 +42,7 @@
 	  	<selenium.version>2.45.0</selenium.version> 
 	   	<slf4j.version>1.7.12</slf4j.version>
 	   	<spring.version>4.1.6.RELEASE</spring.version>
+	   	<spring-security.version>4.0.0.RELEASE</spring-security.version>
 	   	<standard.version>1.1.2</standard.version>
 	   	<querydsl.version>3.6.3</querydsl.version>
     
@@ -57,23 +58,10 @@
 
   	<dependencies>
   
-  		<!--  Spring Bill of Materials -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-framework-bom</artifactId>
-			<version>${spring.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-  
      	<!--  Hibernate  -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
 		</dependency>
     
 		<!-- Spring -->
@@ -87,16 +75,14 @@
 		</dependency>
 		  
   		<!-- Spring Security -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.security</groupId> -->
-<!-- 			<artifactId>spring-security-web</artifactId> -->
-<!-- 			<version>${spring-security.version}</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.security</groupId> -->
-<!-- 			<artifactId>spring-security-config</artifactId> -->
-<!-- 			<version>${spring-security.version}</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
   
   		<!--  Test  -->
 		<dependency>
@@ -252,6 +238,17 @@
 <!-- 		<artifactId>spring-test</artifactId> -->
 <!-- 		<version>${spring.version}</version> -->
 <!-- 		</dependency> -->
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
 		
 		<!--  Servlet  -->
 	    <dependency>
@@ -281,11 +278,6 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-		</dependency>
 		
 		<!-- MySQL Driver --> 
 	    <dependency>
@@ -313,8 +305,7 @@
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<version>${bonecp.version}</version>
-		</dependency>
-		
+		</dependency>		
 	    
 	    <!--  Views -->
 		<dependency>
@@ -416,7 +407,6 @@
    		<plugin>
 			<artifactId>maven-war-plugin</artifactId>
 			<version>${maven-war-plugin.version}</version>
-<!-- 			<configuration><warName>computer-database</warName></configuration> -->
 		</plugin>    	
     	<plugin>
 			<groupId>com.mysema.maven</groupId>

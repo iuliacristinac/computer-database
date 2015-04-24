@@ -20,7 +20,7 @@ import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.jpa.hibernate.HibernateUpdateClause;
 
 @Repository
-public class ComputerDAO implements IDAO<Computer, Long>{
+public class ComputerDAO implements IDAO<Computer, Long> {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -82,7 +82,6 @@ public class ComputerDAO implements IDAO<Computer, Long>{
 									.where(computer.company.id.eq(id))
 									.list(computer);
 		return computers;
-
 	}
 
 	@Override
