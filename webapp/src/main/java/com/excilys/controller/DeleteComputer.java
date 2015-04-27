@@ -14,7 +14,7 @@ public class DeleteComputer {
 	@Autowired
 	private IService<Computer, Long> computerService;
 	
-	@RequestMapping("deleteComputer")
+	@RequestMapping("/deleteComputer")
     public String delete(@RequestParam("id") Long id) {
 		if (id == null) {
 			return "404";

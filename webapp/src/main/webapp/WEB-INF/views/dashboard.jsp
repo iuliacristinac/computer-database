@@ -4,9 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="mylib" %>
+<%@ page session="true"%>
 <c:import url="head.jsp" />
 
 <c:import url="header.jsp" />
+
 <section id="main">
 	<div class="container">
 	 <h1 id="homeTitle"> ${totalEntities} <spring:message code="dashboard.ComputersFound" /> </h1>

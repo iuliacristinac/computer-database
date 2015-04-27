@@ -7,18 +7,20 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 		   http://www.springframework.org/schema/security/spring-security.xsd">
  
 	<!-- enable use-expressions -->
-	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/> 
-		<intercept-url pattern="dashboard" access="hasRole('USER')" />
-		<intercept-url pattern="/**" access="hasRole('ADMIN')"/>
-		<access-denied-handler error-page="/403" />
-		<form-login login-page='/login'
+	<http auto-config="true" use-expressions="false">
+		<intercept-url pattern="/logout/**" access="ROLE_USER, ROLE_ADMIN,IS_AUTHENTICATED_ANONYMOUSLY"/> 
+		<intercept-url pattern="/login/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/> 
+		<intercept-url pattern="/static/**" access="ROLE_USER, ROLE_ADMIN,IS_AUTHENTICATED_ANONYMOUSLY"/> 
+		<intercept-url pattern="/dashboard/**" access="ROLE_USER, ROLE_ADMIN"/>
+		<intercept-url pattern="/**" access="ROLE_ADMIN"/>
+		<form-login login-page="/login"
+					default-target-url="/dashboard"
 					authentication-failure-url="/login?error" 
 					username-parameter="username"
 					password-parameter="password" />
-		<logout delete-cookies="JSESSIONID" 
-				logout-url="/logout"
-				logout-success-url="/logout"/>
+		 <logout  delete-cookies="JSESSIONID" 
+				logout-url="/logout" 
+				logout-success-url="/login?logout"/>
 		<!--This element will add Cross Site Request Forger (CSRF) protection to the application.  -->	 
 		<csrf/>
 		
@@ -32,6 +34,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	<authentication-manager>
 		<authentication-provider user-service-ref="userDetailsService" >
 <!-- 			<password-encoder hash="bcrypt" />     -->
+<password-encoder hash="plaintext" />
 		</authentication-provider>
 	</authentication-manager>
  
