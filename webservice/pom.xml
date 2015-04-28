@@ -2,27 +2,28 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>console</artifactId>
-  
+	<artifactId>webservice</artifactId>
+
 	<parent>
 		<groupId>com.excilys</groupId>
 		<artifactId>computerDB</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-
+	
 	<dependencies>
 	
 		<!-- Module -->
 		<dependency>
-			<groupId>${pom.groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>binding</artifactId>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>webservice</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>service</artifactId>
 		</dependency>
-	
+
+		
 	</dependencies>
-	
+
 </project>

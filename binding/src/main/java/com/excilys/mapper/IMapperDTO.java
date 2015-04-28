@@ -9,7 +9,7 @@ public interface IMapperDTO<T, U> {
 	
 	T mapDTOToModel(U dto);
 	
-	default List<U> modelsToDto(List<T> models) {
+	default List<U> mapModelsToDTO(List<T> models) {
 		if (models == null) {
 			throw new IllegalArgumentException("IMapperDTO - Invalid models");
 		}		
