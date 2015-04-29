@@ -13,6 +13,7 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.IService;
 
+@Component
 @WebService(endpointInterface="com.excilys.webservice.IComputerDBWS")
 public class ComputerDBWS implements IComputerDBWS{
 	
