@@ -44,7 +44,7 @@ public class EditComputer {
 	
 	@ModelAttribute("companies")
 	private List<CompanyDTO> getCompanies() {
-		return companyMapperDTO.modelsToDto(companyService.getAll());
+		return companyMapperDTO.mapModelsToDTO(companyService.getAll());
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)	

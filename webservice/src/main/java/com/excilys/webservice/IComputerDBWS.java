@@ -7,8 +7,8 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 
-import com.excilys.dto.CompanyDTO;
-import com.excilys.dto.ComputerDTO;
+import com.excilys.model.Company;
+import com.excilys.model.Computer;
 
 @WebService
 @SOAPBinding(style=Style.DOCUMENT)
@@ -18,25 +18,25 @@ public interface IComputerDBWS {
 	long count();
 	
 	@WebMethod
-	List<ComputerDTO> getAllComputers();
+	List<Computer> getAllComputers();
 	
 	@WebMethod
-	ComputerDTO getByIdComputer(long id);
+	Computer getByIdComputer(long id);
 	
 	@WebMethod
-	void create(ComputerDTO computer);
+	void create(Computer computer);
 	
 	@WebMethod
-	void update(ComputerDTO computer);
+	void update(Computer computer);
 	
 	@WebMethod
 	void deleteComputer(long id);
 	
 	@WebMethod
-	List<CompanyDTO> getAllCompanies();
+	List<Company> getAllCompanies();
 	
 	@WebMethod
-	CompanyDTO getByIdCompany(long id);
+	Company getByIdCompany(long id);
 	
 	@WebMethod
 	void deleteCompany(long id);	

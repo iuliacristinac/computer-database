@@ -60,5 +60,24 @@ public class ComputerDTO {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ComputerDTO [id=");
+		builder.append(id);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", introduced=");
+		builder.append(introduced);
+		builder.append(", discontinued=");
+		builder.append(discontinued);
+		builder.append(", companyId=");
+		builder.append(companyId);
+		builder.append(", companyName=");
+		builder.append(companyName);
+		builder.append("]");
+		return builder.toString();
 	}	
+	
 }

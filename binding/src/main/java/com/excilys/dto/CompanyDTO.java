@@ -32,4 +32,15 @@ public class CompanyDTO {
 		}
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("CompanyDTO [id=");
+		builder.append(id);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append("]");
+		return builder.toString();
+	}
 }

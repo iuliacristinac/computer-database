@@ -6,6 +6,7 @@ import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.webservice.IComputerDBWS;
@@ -13,18 +14,16 @@ import com.excilys.webservice.IComputerDBWS;
 @Component
 public class ComputerDBClient {
 
+	@Autowired
 	private IComputerDBWS webservice;
 	
 	public ComputerDBClient() {
-		URL url = null;
-		
+		URL url = null;	
 		try {
-			url = new URL("http://localhost:8083/ws/cdbService?wsdl");
+			url = new URL("http://localhost:8083/ws/cdbWebService?wsdl");
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		QName qname = new QName("http://webservice.excilys.com/", "ComputerDBWSService");
 		Service service = Service.create(url, qname);
 		webservice = service.getPort(IComputerDBWS.class);
@@ -33,9 +32,5 @@ public class ComputerDBClient {
 	public IComputerDBWS getWebservice() {
 		return webservice;
 	}
-
-	public void setWebservice(IComputerDBWS webservice) {
-		this.webservice = webservice;
-	}	
 }
 

@@ -55,7 +55,7 @@ public class ComputerService implements IService<Computer, Long>{
 	@Override
 	@Transactional
 	public void delete( Long id) {
-		if (id <= 0) {
+		if (id == null || id <= 0) {
 			throw new ServiceException("ComputerService_delete - Invalid id!");
 		}
 		computerDAO.delete(id);
@@ -65,7 +65,7 @@ public class ComputerService implements IService<Computer, Long>{
 	@Override
 	@Transactional(readOnly=true)
 	public Computer getById(Long id) {
-		if (id <= 0) {
+		if (id == null || id <= 0) {
 			throw new ServiceException("ComputerService_getbyId - Invalid id!");
 		}
 		return computerDAO.getbyId(id);

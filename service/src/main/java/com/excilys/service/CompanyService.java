@@ -28,7 +28,7 @@ public class CompanyService implements IService<Company, Long> {
 	@Override
 	@Transactional(readOnly=true)
 	public Company getById(Long id) {
-		if (id <= 0) {
+		if (id == null || id <= 0) {
 			throw new ServiceException("CompanyService_getbyId - Invalid id!");
 		}
 		return companyDAO.getbyId(id);
@@ -37,6 +37,9 @@ public class CompanyService implements IService<Company, Long> {
 	@Override
 	@Transactional
 	public void delete(Long id) {
+		if (id == null || id <= 0) {
+			throw new ServiceException("CompanyService_getbyId - Invalid id!");
+		}
 		List<Computer> computers = computerDAO.getAllByCompany(id);
 		for (Computer computer : computers) {
 			computerDAO.delete(computer.getId());

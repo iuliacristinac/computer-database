@@ -5,10 +5,8 @@ import java.util.List;
 import javax.jws.WebService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.excilys.dto.CompanyDTO;
-import com.excilys.dto.ComputerDTO;
-import com.excilys.mapper.IMapperDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.IService;
@@ -21,34 +19,30 @@ public class ComputerDBWS implements IComputerDBWS{
 	private IService<Computer,Long> computerService;
 	@Autowired
 	private IService<Company,Long>  companyService;
-	@Autowired
-	private IMapperDTO<Computer, ComputerDTO> computerMapperDTO;
-	@Autowired
-	private IMapperDTO<Company, CompanyDTO> companyMapperDTO;
-	
+
 	@Override
 	public long count() {
 		return computerService.count();
 	}
 	
 	@Override
-	public List<ComputerDTO> getAllComputers() {
-		return computerMapperDTO.mapModelsToDTO(computerService.getAll());
+	public List<Computer> getAllComputers() {
+		return computerService.getAll();
 	}
 	
 	@Override
-	public ComputerDTO getByIdComputer(long id) {
-		return computerMapperDTO.mapModelToDTO(computerService.getById(id));
+	public Computer getByIdComputer(long id) {
+		return computerService.getById(id);
 	}
 	
 	@Override
-	public void create(ComputerDTO computerDTO) {
-		computerService.create(computerMapperDTO.mapDTOToModel(computerDTO));
+	public void create(Computer computer) {
+		computerService.create(computer);
 	}
 	
 	@Override
-	public void update(ComputerDTO computerDTO) {
-		computerService.update(computerMapperDTO.mapDTOToModel(computerDTO));
+	public void update(Computer computer) {
+		computerService.update(computer);
 	}
 	
 	@Override
@@ -57,13 +51,13 @@ public class ComputerDBWS implements IComputerDBWS{
 	}
 	
 	@Override
-	public List<CompanyDTO> getAllCompanies() {
-		return companyMapperDTO.mapModelsToDTO(companyService.getAll());
+	public List<Company> getAllCompanies() {
+		return companyService.getAll();
 	}
 	
 	@Override
-	public CompanyDTO getByIdCompany(long id) {
-		return companyMapperDTO.mapModelToDTO(companyService.getById(id));
+	public Company getByIdCompany(long id) {
+		return companyService.getById(id);
 	}
 	
 	@Override

@@ -46,7 +46,7 @@ public class Dashboard  {
 		}
 		
 		List<ComputerDTO> computers = new ArrayList<>();
-		computers =  computerMapperDTO.modelsToDto(p.getElements(computersList, pg));
+		computers =  computerMapperDTO.mapModelsToDTO(p.getElements(computersList, pg));
 		model.addAttribute("totalEntities", computerService.count());
 		model.addAttribute("page", p);
 		model.addAttribute("computers", computers);
