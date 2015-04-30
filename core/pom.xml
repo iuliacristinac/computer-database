@@ -5,9 +5,9 @@
 	<artifactId>core</artifactId>
 
 	<parent>
-		 <groupId>com.excilys</groupId>
-		 <artifactId>computerDB</artifactId>
-		 <version>0.0.1-SNAPSHOT</version>
+		<groupId>com.excilys</groupId>
+		<artifactId>computer-database</artifactId>
+		<version>1.0.0-RELEASE</version>
 	</parent>
 
 	<dependencies>

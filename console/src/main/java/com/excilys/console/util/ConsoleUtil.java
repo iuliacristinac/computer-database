@@ -14,19 +14,18 @@ import com.excilys.dto.ComputerDTO;
 
 @Component
 public class ConsoleUtil {
+	
 	@Autowired
 	private MessageSource messageSource;
 	
 	private final String REGEX_ID= "^\\d{1,10}$";
 	
 	/* Validation Methods */
-	
 	public boolean isValidId(String id) {
 		Pattern pattern = Pattern.compile(REGEX_ID);
 		Matcher matcher = pattern.matcher(id);
 		return matcher.matches();
 	}
-	
 	public boolean isValidDate(String date) {
 		String dateRegex = messageSource.getMessage("date.DateFormat", null, LocaleContextHolder.getLocale());
 		Pattern pattern = Pattern.compile(dateRegex);
@@ -43,7 +42,6 @@ public class ConsoleUtil {
 		}
 		return stringBuilder;
 	}
-	
 	public StringBuilder displayCompanies(List<CompanyDTO> list) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for(CompanyDTO o : list){

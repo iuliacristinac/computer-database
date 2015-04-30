@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys</groupId>
-	<artifactId>computerDB</artifactId>
+	<artifactId>computer-database</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-RELEASE</version>
  
 	<modules>
 
@@ -120,12 +120,6 @@
 	        <groupId>org.dbunit</groupId>
 	        <artifactId>dbunit</artifactId>
 	        <scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
 	    </dependency>
 <!-- 	    <dependency> -->
 <!-- 			<groupId>com.excilys.ebi.spring-dbunit</groupId> -->
@@ -204,12 +198,6 @@
 	        <groupId>org.springframework</groupId>
 	        <artifactId>spring-web</artifactId>
 	        <version>${spring.version}</version>
-	        <exclusions>
-	            <exclusion>
-	                <groupId>commons-logging</groupId>
-	                <artifactId>commons-logging</artifactId>
-	            </exclusion>
-	        </exclusions>
 	    </dependency>
 	    <dependency>
 			<groupId>org.springframework</groupId>
@@ -405,6 +393,7 @@
 <!-- 		</dependency> -->
  
  	    <!-- Logging --> 
+		 	    
 	     <dependency>
 	        <groupId>org.slf4j</groupId>
 	        <artifactId>jcl-over-slf4j</artifactId>
@@ -416,6 +405,17 @@
 			<version>${logback.version}</version>
 			<scope>runtime</scope>
 		</dependency>  
+		
+		 <dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>99-empty</version>
+		</dependency>
+		<dependency>
+			<groupId>slf4j</groupId>
+			<artifactId>slf4j</artifactId>
+			<version>99-empty</version>
+		</dependency>
  
     </dependencies>
   </dependencyManagement>
@@ -426,11 +426,18 @@
         <url>http://repo.spring.io/release/</url>
         <snapshots><enabled>false</enabled></snapshots>
     </repository>
-  </repositories>
+     <!-- Highly available repository serving empty artifacts -->
+	<repository>
+		<id>version99</id>
+		<url>http://version99.qos.ch/</url>
+	</repository>
+	</repositories>
   
   <build>
     <finalName>computer-database</finalName>
+    
     <plugins>
+    
     	<plugin>
     		<artifactId>maven-compiler-plugin</artifactId>
     		<configuration>
@@ -438,27 +445,43 @@
 				<target>${java.version}</target>
     		</configuration>
     	</plugin>
-   		<plugin>
-			<artifactId>maven-war-plugin</artifactId>
-			<version>${maven-war-plugin.version}</version>
-		</plugin>    	
     	<plugin>
+			<artifactId>maven-war-plugin</artifactId>
+		</plugin>
+	    <plugin>
 			<groupId>com.mysema.maven</groupId>
 			<artifactId>apt-maven-plugin</artifactId>
-			<version>${com.mysema.maven.version}</version>
-			<executions>
-				<execution>
-					<goals>
-						<goal>process</goal>
-		            </goals>
-		            <configuration>
-		                <outputDirectory>target/generated-sources/java</outputDirectory>
-		                <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-		            </configuration>
-	       		</execution>
-	   		 </executions>
 		</plugin>
+   		
     </plugins>
+    
+    <pluginManagement>
+    
+    	<plugins>
+    		<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+			</plugin>    
+	    	<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>${com.mysema.maven.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>target/generated-sources/java</outputDirectory>
+			                <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+			            </configuration>
+		       		</execution>
+		   		 </executions>
+			</plugin>
+    	</plugins>
+    	
+    </pluginManagement>
+    
   </build>
   
 </project>
