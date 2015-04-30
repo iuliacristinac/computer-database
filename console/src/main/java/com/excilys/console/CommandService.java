@@ -1,25 +1,24 @@
 package com.excilys.console;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.excilys.console.util.ConsoleUtil;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 @Component
 public class CommandService {
 	
-	private final String REGEX_LONG= "^\\d{1,10}$";
-	
 	@Autowired
 	private ComputerDBClient client;	
-	
 	@Autowired
 	private ConsoleService consoleService;
+	@Autowired
+	private ConsoleUtil consoleUtil;
 	
 	public void execute(String command) {
 		
@@ -77,13 +76,13 @@ public class CommandService {
 	}
 	
 	private void getAllComputers() {
-		System.out.println(displayComputers(client.getWebservice().getAllComputers()));
+		System.out.println(consoleUtil.displayComputers(client.getWebservice().getAllComputers()));
 	}
 	
 	private void getByIdComputer() {	
 		System.out.println("Please insert computer's id : ");
 		String id = consoleService.getScanner().nextLine().trim();
-		if (validateId(id)) {
+		if (consoleUtil.isValidId(id)) {
 			System.out.println((client.getWebservice().getByIdComputer(Long.parseLong(id))));
 		} else {
 			System.out.println("Invalid id -> Display Action Abandoned");
@@ -91,24 +90,41 @@ public class CommandService {
 	}
 
 	private void create() {
-//		System.out.println("Please enter a computer name: ");
-//		String name = consoleService.getScanner().nextLine().trim();
-//		System.out.println("Would you like to enter an introduced date? (y/n)");
-//		String answerIntroduced = consoleService.getScanner().nextLine().trim();
-//		if(isPositiveAnswer(answerIntroduced)) {
-//			System.out.println("Please entre the introduced date (format )");
-//		}
-		
+		System.out.println("Please enter a computer name: ");
+		String name = consoleService.getScanner().nextLine().trim();
+		LocalDateTime introducedDate = getIntoducedDate(null);
+		LocalDateTime discontinuedDate = getDiscontinuedDate(null);
+		Company company = getCompany(null);
+		client.getWebservice().create(new Computer(name,introducedDate, discontinuedDate, company));	
 	}
 	
 	private void update() {
-			
+		System.out.println("Please insert computer's id : ");
+		String id = consoleService.getScanner().nextLine().trim();
+		Computer computer;
+		if (consoleUtil.isValidId(id)) {
+			computer = client.getWebservice().getByIdComputer(Long.parseLong(id));
+			System.out.println(computer);
+			System.out.println("Would you like to enter a computer name? (y/n)");
+			String answerName = consoleService.getScanner().nextLine().trim();
+			String name = computer.getName();
+			if(consoleUtil.isPositiveAnswer(answerName)) {
+				System.out.println("Please enter a computer name");
+				name = consoleService.getScanner().nextLine().trim();	
+			}
+			LocalDateTime introducedDate = getIntoducedDate(computer.getIntroduced());
+			LocalDateTime discontinuedDate = getDiscontinuedDate(computer.getDiscontinued());
+			Company company = getCompany(computer.getCompany());
+			client.getWebservice().update(new Computer(Long.parseLong(id),name,introducedDate, discontinuedDate, company));	
+		} else {
+			System.out.println("Invalid id -> Update Action Abandoned");
+		}	
 	}
 	
 	private void deleteComputer() {
 		System.out.println("Please insert computer's id : ");
 		String id = consoleService.getScanner().nextLine().trim();
-		if (validateId(id)) {
+		if (consoleUtil.isValidId(id)) {
 			client.getWebservice().deleteComputer(Long.parseLong(id));
 		} else {
 			System.out.println("Invalid id -> Delete Action Abandoned");
@@ -116,13 +132,13 @@ public class CommandService {
 	}
 	
 	private void getAllCompanies() {
-		System.out.println(displayCompanies(client.getWebservice().getAllCompanies()));
+		System.out.println(consoleUtil.displayCompanies(client.getWebservice().getAllCompanies()));
 	}
 	
 	private void getByIdCompany() {
 		System.out.println("Please insert company's id : ");
 		String id = consoleService.getScanner().nextLine().trim();
-		if (validateId(id)) {
+		if (consoleUtil.isValidId(id)) {
 			System.out.println((client.getWebservice().getByIdCompany(Long.parseLong(id))));
 		} else {
 			System.out.println("Invalid id -> Display Action Abandoned");
@@ -132,7 +148,7 @@ public class CommandService {
 	private void deleteCompany() {
 		System.out.println("Please insert company's id : ");
 		String id = consoleService.getScanner().nextLine().trim();
-		if (validateId(id)) {
+		if (consoleUtil.isValidId(id)) {
 			client.getWebservice().deleteCompany(Long.parseLong(id));
 		} else {
 			System.out.println("Invalid id -> Delete Action Abandoned");
@@ -148,43 +164,55 @@ public class CommandService {
 		System.out.println("The command is invalid.");
 	}
 	
-	/* y/n Answer Methods */
-	private boolean isPositiveAnswer(String answer) {
-		boolean ans = false;
-		switch(answer) {
-			case "y":
-				ans = true;
-				break;
-			default:
-				break;
+	/*Create and Update Helpful Methods  */ 
+	private LocalDateTime getIntoducedDate(LocalDateTime defaultIDate) {
+		System.out.println("Would you like to enter an introduced date? (y/n)");
+		String answerIntroduced = consoleService.getScanner().nextLine().trim();
+		LocalDateTime introducedDate = defaultIDate;
+		if(consoleUtil.isPositiveAnswer(answerIntroduced)) {
+			System.out.println("Please enter the introduced date (format : MM-dd-yyyy )");
+			String iDate = consoleService.getScanner().nextLine().trim();
+			if(consoleUtil.isValidDate(iDate)) {
+				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+				introducedDate =  LocalDateTime.parse(iDate, formatter);
+			} else {
+				System.out.println("Invalid Date");
+			}	
 		}
-		return ans;
+		return introducedDate;
 	}
 	
-	/* Validation Methods */
-	
-	private boolean validateId(String id) {
-		Pattern pattern = Pattern.compile(REGEX_LONG);
-		Matcher matcher = pattern.matcher(id);
-		return matcher.matches();
+	private LocalDateTime getDiscontinuedDate( LocalDateTime defaultDDate) {
+		System.out.println("Would you like to enter an discontinued date? (y/n)");
+		String answerDiscontinued = consoleService.getScanner().nextLine().trim();
+		LocalDateTime discontinuedDate = defaultDDate;
+		if(consoleUtil.isPositiveAnswer(answerDiscontinued)) {
+			System.out.println("Please enter the discontinued date (format : MM-dd-yyyy )");
+			String dDate = consoleService.getScanner().nextLine().trim();
+			if(consoleUtil.isValidDate(dDate)) {
+				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+				discontinuedDate =  LocalDateTime.parse(dDate, formatter);
+			} else {
+				System.out.println("Invalid Date");
+			}	
+		}
+		return discontinuedDate;
 	}
 	
-	/* Display Methods */
-	private StringBuilder displayComputers(List<Computer> list) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for(Computer o : list){
-			stringBuilder.append(o);
-			stringBuilder.append("\n");
+	private Company getCompany(Company defaultCompany) {
+		System.out.println("Would you like to enter company for the computer? (y/n)");
+		String answerCompany = consoleService.getScanner().nextLine().trim();
+		Company company = defaultCompany;
+		if(consoleUtil.isPositiveAnswer(answerCompany)) {
+			System.out.println("Please enter the id of the company");
+			String id = consoleService.getScanner().nextLine().trim();
+			if(consoleUtil.isValidId(id)) {
+				company = client.getWebservice().getByIdCompany(Long.parseLong(id));
+				System.out.println(company);
+			} else {
+				System.out.println("Invalid Id");
+			}	
 		}
-		return stringBuilder;
-	}
-	
-	private StringBuilder displayCompanies(List<Company> list) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for(Company o : list){
-			stringBuilder.append(o);
-			stringBuilder.append("\n");
-		}
-		return stringBuilder;
+		return company;
 	}
 }

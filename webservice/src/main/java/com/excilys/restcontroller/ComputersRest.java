@@ -28,7 +28,6 @@ public class ComputersRest  {
 	        produces={MediaType.APPLICATION_JSON_VALUE, 
 	                  MediaType.APPLICATION_XML_VALUE})
 	public List<ComputerDTO> getComputers( ) {
-			
 		return  computerMapperDTO.mapModelsToDTO(computerService.getAll());
 	}
 }

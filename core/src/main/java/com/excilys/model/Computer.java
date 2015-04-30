@@ -58,6 +58,14 @@ public class Computer implements Serializable {
 		this.company = company;
 	}
 	
+	public Computer( String name, LocalDateTime introduced, LocalDateTime discontinued, Company company) {
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.company = company;
+	}
+
+	
 	public Computer(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, Company company) {
 		this.id = id;
 		this.name = name;

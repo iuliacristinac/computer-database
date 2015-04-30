@@ -49,8 +49,10 @@ public class ComputerDAO implements IDAO<Computer, Long> {
 		
 		HibernateQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
 		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
 		Computer result = query
 							.from(computer)
+							.leftJoin(computer.company, company)
 							.where(computer.id.eq(id))
 							.uniqueResult(computer);
 		return result;

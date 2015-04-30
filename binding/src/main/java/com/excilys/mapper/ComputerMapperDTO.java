@@ -66,14 +66,12 @@ public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 		if (dto.getIntroduced() != null) {
 			dto.setIntroduced( dto.getIntroduced().trim());
 			if (!dto.getIntroduced().isEmpty()) {
-//				dto.setIntroduced( dateUtil.convertToValidDate(dto.getIntroduced()));
 				computer.setIntroduced(LocalDateTime.parse(dto.getIntroduced(), formatter));
 			}
 		}
 		if (dto.getDiscontinued() != null) {
 			dto.setDiscontinued(dto.getDiscontinued().trim());
 			if (!dto.getDiscontinued().isEmpty()) {
-//				dto.setDiscontinued( dateUtil.convertToValidDate(dto.getDiscontinued()));
 				computer.setDiscontinued(LocalDateTime.parse(dto.getDiscontinued(), formatter));
 			}
 		}
