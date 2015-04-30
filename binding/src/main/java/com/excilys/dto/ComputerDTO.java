@@ -25,6 +25,25 @@ public class ComputerDTO {
 	@Size(min=0, max=100)
 	private String companyName;
 	
+	public ComputerDTO() { }
+	
+	public ComputerDTO(String name, String introduced, String discontinued, long companyId, String companyName) {
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyId = companyId;
+		this.companyName = companyName;
+	}
+	
+	public ComputerDTO(long id, String name, String introduced, String discontinued, long companyId, String companyName) {
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyId = companyId;
+		this.companyName = companyName;
+	}
+	
 	public long getId() {
 		return id;
 	}

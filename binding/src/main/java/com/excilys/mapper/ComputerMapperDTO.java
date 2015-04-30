@@ -55,7 +55,7 @@ public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 			throw new IllegalArgumentException("ComputeryMapperDTO - Invalid DTO!");
 		}
 		
-		String datePattern = messageSource.getMessage("date.DatePattern", null, LocaleContextHolder.getLocale());
+		String datePattern = messageSource.getMessage("date.DatePatternFull", null, LocaleContextHolder.getLocale());
 		
 		final Computer computer = new Computer();
 		computer.setId(dto.getId());
@@ -66,13 +66,13 @@ public class ComputerMapperDTO implements IMapperDTO<Computer, ComputerDTO> {
 		if (dto.getIntroduced() != null) {
 			dto.setIntroduced( dto.getIntroduced().trim());
 			if (!dto.getIntroduced().isEmpty()) {
-				computer.setIntroduced(LocalDateTime.parse(dto.getIntroduced(), formatter));
+				computer.setIntroduced(LocalDateTime.parse(dateUtil.convertToValidDate(dto.getIntroduced()), formatter));
 			}
 		}
 		if (dto.getDiscontinued() != null) {
 			dto.setDiscontinued(dto.getDiscontinued().trim());
 			if (!dto.getDiscontinued().isEmpty()) {
-				computer.setDiscontinued(LocalDateTime.parse(dto.getDiscontinued(), formatter));
+				computer.setDiscontinued(LocalDateTime.parse(dateUtil.convertToValidDate(dto.getDiscontinued()), formatter));
 			}
 		}
 		

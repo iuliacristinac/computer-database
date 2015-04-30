@@ -4,16 +4,20 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.excilys.model.Company;
-import com.excilys.model.Computer;
+import com.excilys.dto.CompanyDTO;
+import com.excilys.dto.ComputerDTO;
 
 @Component
 public class ConsoleUtil {
+	@Autowired
+	private MessageSource messageSource;
 	
 	private final String REGEX_ID= "^\\d{1,10}$";
-	private final String REGEX_DATE= "(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])-((19|20)\\d\\d)";
 	
 	/* Validation Methods */
 	
@@ -24,24 +28,25 @@ public class ConsoleUtil {
 	}
 	
 	public boolean isValidDate(String date) {
-		Pattern pattern = Pattern.compile(REGEX_DATE);
+		String dateRegex = messageSource.getMessage("date.DateFormat", null, LocaleContextHolder.getLocale());
+		Pattern pattern = Pattern.compile(dateRegex);
 		Matcher matcher = pattern.matcher(date);
 		return matcher.matches();
 	}
 	
 	/* Display Methods */
-	public StringBuilder displayComputers(List<Computer> list) {
+	public StringBuilder displayComputers(List<ComputerDTO> list) {
 		StringBuilder stringBuilder = new StringBuilder();
-		for(Computer o : list){
+		for(ComputerDTO o : list){
 			stringBuilder.append(o);
 			stringBuilder.append("\n");
 		}
 		return stringBuilder;
 	}
 	
-	public StringBuilder displayCompanies(List<Company> list) {
+	public StringBuilder displayCompanies(List<CompanyDTO> list) {
 		StringBuilder stringBuilder = new StringBuilder();
-		for(Company o : list){
+		for(CompanyDTO o : list){
 			stringBuilder.append(o);
 			stringBuilder.append("\n");
 		}

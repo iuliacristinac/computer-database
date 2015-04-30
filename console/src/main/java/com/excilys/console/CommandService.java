@@ -1,14 +1,10 @@
 package com.excilys.console;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.console.util.ConsoleUtil;
-import com.excilys.model.Company;
-import com.excilys.model.Computer;
+import com.excilys.dto.ComputerDTO;
 
 @Component
 public class CommandService {
@@ -92,30 +88,38 @@ public class CommandService {
 	private void create() {
 		System.out.println("Please enter a computer name: ");
 		String name = consoleService.getScanner().nextLine().trim();
-		LocalDateTime introducedDate = getIntoducedDate(null);
-		LocalDateTime discontinuedDate = getDiscontinuedDate(null);
-		Company company = getCompany(null);
-		client.getWebservice().create(new Computer(name,introducedDate, discontinuedDate, company));	
+		String introducedDate = getIntoducedDate(null);
+		String discontinuedDate = getDiscontinuedDate(null);
+		long companyId = getCompanyId(0);
+		String companyName = null;
+		if(companyId > 0){
+			companyName = getCompanyName(companyId);
+		}
+		client.getWebservice().create(new ComputerDTO(name,introducedDate, discontinuedDate, companyId, companyName));	
 	}
 	
 	private void update() {
 		System.out.println("Please insert computer's id : ");
 		String id = consoleService.getScanner().nextLine().trim();
-		Computer computer;
+		ComputerDTO computerDTO;
 		if (consoleUtil.isValidId(id)) {
-			computer = client.getWebservice().getByIdComputer(Long.parseLong(id));
-			System.out.println(computer);
+			computerDTO = client.getWebservice().getByIdComputer(Long.parseLong(id));
+			System.out.println(computerDTO);
 			System.out.println("Would you like to enter a computer name? (y/n)");
 			String answerName = consoleService.getScanner().nextLine().trim();
-			String name = computer.getName();
+			String name = computerDTO.getName();
 			if(consoleUtil.isPositiveAnswer(answerName)) {
 				System.out.println("Please enter a computer name");
 				name = consoleService.getScanner().nextLine().trim();	
 			}
-			LocalDateTime introducedDate = getIntoducedDate(computer.getIntroduced());
-			LocalDateTime discontinuedDate = getDiscontinuedDate(computer.getDiscontinued());
-			Company company = getCompany(computer.getCompany());
-			client.getWebservice().update(new Computer(Long.parseLong(id),name,introducedDate, discontinuedDate, company));	
+			String introducedDate = getIntoducedDate(computerDTO.getIntroduced());
+			String discontinuedDate = getDiscontinuedDate(computerDTO.getDiscontinued());
+			long companyId = getCompanyId(computerDTO.getCompanyId());
+			String companyName = null;
+			if(companyId > 0){
+				companyName = getCompanyName(companyId);
+			}
+			client.getWebservice().update(new ComputerDTO(Long.parseLong(id),name,introducedDate, discontinuedDate, companyId, companyName));	
 		} else {
 			System.out.println("Invalid id -> Update Action Abandoned");
 		}	
@@ -165,16 +169,15 @@ public class CommandService {
 	}
 	
 	/*Create and Update Helpful Methods  */ 
-	private LocalDateTime getIntoducedDate(LocalDateTime defaultIDate) {
+	private String getIntoducedDate(String defaultIDate) {
 		System.out.println("Would you like to enter an introduced date? (y/n)");
 		String answerIntroduced = consoleService.getScanner().nextLine().trim();
-		LocalDateTime introducedDate = defaultIDate;
+		String introducedDate = defaultIDate;
 		if(consoleUtil.isPositiveAnswer(answerIntroduced)) {
 			System.out.println("Please enter the introduced date (format : MM-dd-yyyy )");
 			String iDate = consoleService.getScanner().nextLine().trim();
 			if(consoleUtil.isValidDate(iDate)) {
-				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-				introducedDate =  LocalDateTime.parse(iDate, formatter);
+				introducedDate =  iDate;
 			} else {
 				System.out.println("Invalid Date");
 			}	
@@ -182,16 +185,15 @@ public class CommandService {
 		return introducedDate;
 	}
 	
-	private LocalDateTime getDiscontinuedDate( LocalDateTime defaultDDate) {
+	private String getDiscontinuedDate( String defaultDDate) {
 		System.out.println("Would you like to enter an discontinued date? (y/n)");
 		String answerDiscontinued = consoleService.getScanner().nextLine().trim();
-		LocalDateTime discontinuedDate = defaultDDate;
+		String discontinuedDate = defaultDDate;
 		if(consoleUtil.isPositiveAnswer(answerDiscontinued)) {
 			System.out.println("Please enter the discontinued date (format : MM-dd-yyyy )");
 			String dDate = consoleService.getScanner().nextLine().trim();
 			if(consoleUtil.isValidDate(dDate)) {
-				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-				discontinuedDate =  LocalDateTime.parse(dDate, formatter);
+				discontinuedDate =  dDate;
 			} else {
 				System.out.println("Invalid Date");
 			}	
@@ -199,20 +201,23 @@ public class CommandService {
 		return discontinuedDate;
 	}
 	
-	private Company getCompany(Company defaultCompany) {
+	private long getCompanyId(long defaultCompanyId) {
 		System.out.println("Would you like to enter company for the computer? (y/n)");
 		String answerCompany = consoleService.getScanner().nextLine().trim();
-		Company company = defaultCompany;
+		long companyId = defaultCompanyId;
 		if(consoleUtil.isPositiveAnswer(answerCompany)) {
 			System.out.println("Please enter the id of the company");
 			String id = consoleService.getScanner().nextLine().trim();
 			if(consoleUtil.isValidId(id)) {
-				company = client.getWebservice().getByIdCompany(Long.parseLong(id));
-				System.out.println(company);
+				companyId = Long.parseLong(id);
 			} else {
 				System.out.println("Invalid Id");
 			}	
 		}
-		return company;
+		return companyId;
+	}
+	
+	private String getCompanyName(long companyId) {
+		return client.getWebservice().getByIdCompany(companyId).getName();
 	}
 }
