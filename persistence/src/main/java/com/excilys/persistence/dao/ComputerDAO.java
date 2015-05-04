@@ -41,6 +41,22 @@ public class ComputerDAO implements IDAO<Computer, Long> {
 	}
 	
 	@Override
+	public List<Computer> search(String text) {
+		
+		HibernateQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
+		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
+		List<Computer> computers = query
+									.from(computer)
+									.leftJoin(computer.company, company)
+									.where((computer.name.like("%text%"))
+											.or (computer.company.name.like("%text%")))
+									.list(computer);
+		return computers;
+	}
+
+	
+	@Override
 	public Computer getbyId(Long id) {	
 		
 		if (id == null || id < 0) {

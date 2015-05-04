@@ -28,6 +28,12 @@ public class ComputerService implements IService<Computer, Long>{
 	
 	@Override
 	@Transactional(readOnly=true)
+	public List<Computer> search(String text) {
+		return computerDAO.search(text);
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
 	public List<Computer> getAll() {
 		return computerDAO.getAll();
 	}

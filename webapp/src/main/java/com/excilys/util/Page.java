@@ -1,6 +1,7 @@
 package com.excilys.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.excilys.model.Computer;
@@ -11,6 +12,9 @@ public class Page {
 	private int currentPage;
 	private int numberOfPages;
 	private int size;
+	private List<String> properties;
+	private String textualProperties;
+	private Sort sort;
 	private boolean previous;
 	private boolean next;
 	
@@ -25,6 +29,20 @@ public class Page {
 	public Page (List<Computer> list) {
 		currentPage = 1;
 		size = ELEMENTS_BY_PAGE;
+		if (!list.isEmpty()) {
+			numberOfPages = list.size() / size;
+			if (list.size() % size != 0) {
+				numberOfPages++;
+			}
+		}
+		else {
+			numberOfPages = 1;
+		}
+	}
+	
+	public Page (List<Computer> list, int sz) {
+		currentPage = 1;
+		size = sz;
 		if (!list.isEmpty()) {
 			numberOfPages = list.size() / size;
 			if (list.size() % size != 0) {
@@ -79,6 +97,48 @@ public class Page {
 		this.size = size;
 	}
 
+	 public String getProperties() {
+		 if (properties == null) {
+			 	return null;
+		 }
+		 if (textualProperties == null) {
+			 StringBuilder sb = new StringBuilder();
+			 sb.append(properties.get(0));
+			 for (int k = 1; k < properties.size(); ++k) {
+				 sb.append(", ").append(properties.get(k));
+			 }
+			 textualProperties = sb.toString();
+		 }
+		 return textualProperties;
+	 }
+
+	 public void setProperties(String... properties) {
+		 if (properties.length == 0) {
+			 throw new IllegalArgumentException();
+		 }
+		 if (properties.length > 0) {
+			 this.properties = Arrays.asList(properties);
+		 }
+	 }
+	 
+	 public void setProperties(List<String> properties) {
+		 if (properties == null || properties.isEmpty()) {
+			 throw new IllegalArgumentException();
+		 }
+		 this.properties = properties;
+	 }
+	
+	 public Sort getSort() {
+		 return sort;
+	 }
+
+	 public void setSort(Sort sort) {
+		 if (sort == null) {
+			 throw new IllegalArgumentException();
+		 }
+		 this.sort = sort;
+	 }
+	 
 	public boolean isPrevious() {
 		return previous;
 	}

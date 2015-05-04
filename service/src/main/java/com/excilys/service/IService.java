@@ -9,6 +9,10 @@ public interface IService<T, I extends Serializable> {
 		throw new UnsupportedOperationException();
 	}
 	
+	default List<T> search(String text) {
+		throw new UnsupportedOperationException();
+	}
+	
 	default List<T> getAll() {
 		throw new UnsupportedOperationException();
 	}
